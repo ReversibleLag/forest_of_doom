@@ -1,6 +1,6 @@
 #include <iostream>
+#include <limits>
 #include <stdlib.h>
-
 class Player {
 
 public:
@@ -20,6 +20,7 @@ public:
   // Current Luck, based on initLuck.
   int currLuck = 0;
 
+  int gold = 0;
   // 1 Potion of SKILL
   // 2 Potion of STRENGTH
   // 3 Potion of LUCK
@@ -35,8 +36,430 @@ public:
     currSkill = initSkill;
     currStamina = initStamina;
     currLuck = initLuck;
+    gold = 30;
   }
 };
+void intro(Player &player);
+void background();
+int choice();
+void page_1(Player &player);
+void page_2(Player &player);
+void page_3(Player &player);
+void page_4(Player &player);
+void page_5(Player &player);
+void page_6(Player &player);
+void page_7(Player &player);
+void page_8(Player &player);
+void page_9(Player &player);
+void page_10(Player &player);
+void page_11(Player &player);
+void page_12(Player &player);
+void page_13(Player &player);
+void page_14(Player &player);
+void page_15(Player &player);
+void page_16(Player &player);
+void page_17(Player &player);
+void page_18(Player &player);
+void page_19(Player &player);
+void page_20(Player &player);
+void page_21(Player &player);
+void page_22(Player &player);
+void page_23(Player &player);
+void page_24(Player &player);
+void page_25(Player &player);
+void page_26(Player &player);
+void page_27(Player &player);
+void page_28(Player &player);
+void page_29(Player &player);
+void page_30(Player &player);
+void page_31(Player &player);
+void page_32(Player &player);
+void page_33(Player &player);
+void page_34(Player &player);
+void page_35(Player &player);
+void page_36(Player &player);
+void page_37(Player &player);
+void page_38(Player &player);
+void page_39(Player &player);
+void page_40(Player &player);
+void page_41(Player &player);
+void page_42(Player &player);
+void page_43(Player &player);
+void page_44(Player &player);
+void page_45(Player &player);
+void page_46(Player &player);
+void page_47(Player &player);
+void page_48(Player &player);
+void page_49(Player &player);
+void page_50(Player &player);
+void page_51(Player &player);
+void page_52(Player &player);
+void page_53(Player &player);
+void page_54(Player &player);
+void page_55(Player &player);
+void page_56(Player &player);
+void page_57(Player &player);
+void page_58(Player &player);
+void page_59(Player &player);
+void page_60(Player &player);
+void page_61(Player &player);
+void page_62(Player &player);
+void page_63(Player &player);
+void page_64(Player &player);
+void page_65(Player &player);
+void page_66(Player &player);
+void page_67(Player &player);
+void page_68(Player &player);
+void page_69(Player &player);
+void page_70(Player &player);
+void page_71(Player &player);
+void page_72(Player &player);
+void page_73(Player &player);
+void page_74(Player &player);
+void page_75(Player &player);
+void page_76(Player &player);
+void page_77(Player &player);
+void page_78(Player &player);
+void page_79(Player &player);
+void page_80(Player &player);
+void page_81(Player &player);
+void page_82(Player &player);
+void page_83(Player &player);
+void page_84(Player &player);
+void page_85(Player &player);
+void page_86(Player &player);
+void page_87(Player &player);
+void page_88(Player &player);
+void page_89(Player &player);
+void page_90(Player &player);
+void page_91(Player &player);
+void page_92(Player &player);
+void page_93(Player &player);
+void page_94(Player &player);
+void page_95(Player &player);
+void page_96(Player &player);
+void page_97(Player &player);
+void page_98(Player &player);
+void page_99(Player &player);
+void page_100(Player &player);
+void page_101(Player &player);
+void page_102(Player &player);
+void page_103(Player &player);
+void page_104(Player &player);
+void page_105(Player &player);
+void page_106(Player &player);
+void page_107(Player &player);
+void page_108(Player &player);
+void page_109(Player &player);
+void page_110(Player &player);
+void page_111(Player &player);
+void page_112(Player &player);
+void page_113(Player &player);
+void page_114(Player &player);
+void page_115(Player &player);
+void page_116(Player &player);
+void page_117(Player &player);
+void page_118(Player &player);
+void page_119(Player &player);
+void page_120(Player &player);
+void page_121(Player &player);
+void page_122(Player &player);
+void page_123(Player &player);
+void page_124(Player &player);
+void page_125(Player &player);
+void page_126(Player &player);
+void page_127(Player &player);
+void page_128(Player &player);
+void page_129(Player &player);
+void page_130(Player &player);
+void page_131(Player &player);
+void page_132(Player &player);
+void page_133(Player &player);
+void page_134(Player &player);
+void page_135(Player &player);
+void page_136(Player &player);
+void page_137(Player &player);
+void page_138(Player &player);
+void page_139(Player &player);
+void page_140(Player &player);
+void page_141(Player &player);
+void page_142(Player &player);
+void page_143(Player &player);
+void page_144(Player &player);
+void page_145(Player &player);
+void page_146(Player &player);
+void page_147(Player &player);
+void page_148(Player &player);
+void page_149(Player &player);
+void page_150(Player &player);
+void page_151(Player &player);
+void page_152(Player &player);
+void page_153(Player &player);
+void page_154(Player &player);
+void page_155(Player &player);
+void page_156(Player &player);
+void page_157(Player &player);
+void page_158(Player &player);
+void page_159(Player &player);
+void page_160(Player &player);
+void page_161(Player &player);
+void page_162(Player &player);
+void page_163(Player &player);
+void page_164(Player &player);
+void page_165(Player &player);
+void page_166(Player &player);
+void page_167(Player &player);
+void page_168(Player &player);
+void page_169(Player &player);
+void page_170(Player &player);
+void page_171(Player &player);
+void page_172(Player &player);
+void page_173(Player &player);
+void page_174(Player &player);
+void page_175(Player &player);
+void page_176(Player &player);
+void page_177(Player &player);
+void page_178(Player &player);
+void page_179(Player &player);
+void page_180(Player &player);
+void page_181(Player &player);
+void page_182(Player &player);
+void page_183(Player &player);
+void page_184(Player &player);
+void page_185(Player &player);
+void page_186(Player &player);
+void page_187(Player &player);
+void page_188(Player &player);
+void page_189(Player &player);
+void page_190(Player &player);
+void page_191(Player &player);
+void page_192(Player &player);
+void page_193(Player &player);
+void page_194(Player &player);
+void page_195(Player &player);
+void page_196(Player &player);
+void page_197(Player &player);
+void page_198(Player &player);
+void page_199(Player &player);
+void page_200(Player &player);
+void page_201(Player &player);
+void page_202(Player &player);
+void page_203(Player &player);
+void page_204(Player &player);
+void page_205(Player &player);
+void page_206(Player &player);
+void page_207(Player &player);
+void page_208(Player &player);
+void page_209(Player &player);
+void page_210(Player &player);
+void page_211(Player &player);
+void page_212(Player &player);
+void page_213(Player &player);
+void page_214(Player &player);
+void page_215(Player &player);
+void page_216(Player &player);
+void page_217(Player &player);
+void page_218(Player &player);
+void page_219(Player &player);
+void page_220(Player &player);
+void page_221(Player &player);
+void page_222(Player &player);
+void page_223(Player &player);
+void page_224(Player &player);
+void page_225(Player &player);
+void page_226(Player &player);
+void page_227(Player &player);
+void page_228(Player &player);
+void page_229(Player &player);
+void page_230(Player &player);
+void page_231(Player &player);
+void page_232(Player &player);
+void page_233(Player &player);
+void page_234(Player &player);
+void page_235(Player &player);
+void page_236(Player &player);
+void page_237(Player &player);
+void page_238(Player &player);
+void page_239(Player &player);
+void page_240(Player &player);
+void page_241(Player &player);
+void page_242(Player &player);
+void page_243(Player &player);
+void page_244(Player &player);
+void page_245(Player &player);
+void page_246(Player &player);
+void page_247(Player &player);
+void page_248(Player &player);
+void page_249(Player &player);
+void page_250(Player &player);
+void page_251(Player &player);
+void page_252(Player &player);
+void page_253(Player &player);
+void page_254(Player &player);
+void page_255(Player &player);
+void page_256(Player &player);
+void page_257(Player &player);
+void page_258(Player &player);
+void page_259(Player &player);
+void page_260(Player &player);
+void page_261(Player &player);
+void page_262(Player &player);
+void page_263(Player &player);
+void page_264(Player &player);
+void page_265(Player &player);
+void page_266(Player &player);
+void page_267(Player &player);
+void page_268(Player &player);
+void page_269(Player &player);
+void page_270(Player &player);
+void page_271(Player &player);
+void page_272(Player &player);
+void page_273(Player &player);
+void page_274(Player &player);
+void page_275(Player &player);
+void page_276(Player &player);
+void page_277(Player &player);
+void page_278(Player &player);
+void page_279(Player &player);
+void page_280(Player &player);
+void page_281(Player &player);
+void page_282(Player &player);
+void page_283(Player &player);
+void page_284(Player &player);
+void page_285(Player &player);
+void page_286(Player &player);
+void page_287(Player &player);
+void page_288(Player &player);
+void page_289(Player &player);
+void page_290(Player &player);
+void page_291(Player &player);
+void page_292(Player &player);
+void page_293(Player &player);
+void page_294(Player &player);
+void page_295(Player &player);
+void page_296(Player &player);
+void page_297(Player &player);
+void page_298(Player &player);
+void page_299(Player &player);
+void page_300(Player &player);
+void page_301(Player &player);
+void page_302(Player &player);
+void page_303(Player &player);
+void page_304(Player &player);
+void page_305(Player &player);
+void page_306(Player &player);
+void page_307(Player &player);
+void page_308(Player &player);
+void page_309(Player &player);
+void page_310(Player &player);
+void page_311(Player &player);
+void page_312(Player &player);
+void page_313(Player &player);
+void page_314(Player &player);
+void page_315(Player &player);
+void page_316(Player &player);
+void page_317(Player &player);
+void page_318(Player &player);
+void page_319(Player &player);
+void page_320(Player &player);
+void page_321(Player &player);
+void page_322(Player &player);
+void page_323(Player &player);
+void page_324(Player &player);
+void page_325(Player &player);
+void page_326(Player &player);
+void page_327(Player &player);
+void page_328(Player &player);
+void page_329(Player &player);
+void page_330(Player &player);
+void page_331(Player &player);
+void page_332(Player &player);
+void page_333(Player &player);
+void page_334(Player &player);
+void page_335(Player &player);
+void page_336(Player &player);
+void page_337(Player &player);
+void page_338(Player &player);
+void page_339(Player &player);
+void page_340(Player &player);
+void page_341(Player &player);
+void page_342(Player &player);
+void page_343(Player &player);
+void page_344(Player &player);
+void page_345(Player &player);
+void page_346(Player &player);
+void page_347(Player &player);
+void page_348(Player &player);
+void page_349(Player &player);
+void page_350(Player &player);
+void page_351(Player &player);
+void page_352(Player &player);
+void page_353(Player &player);
+void page_354(Player &player);
+void page_355(Player &player);
+void page_356(Player &player);
+void page_357(Player &player);
+void page_358(Player &player);
+void page_359(Player &player);
+void page_360(Player &player);
+void page_361(Player &player);
+void page_362(Player &player);
+void page_363(Player &player);
+void page_364(Player &player);
+void page_365(Player &player);
+void page_366(Player &player);
+void page_367(Player &player);
+void page_368(Player &player);
+void page_369(Player &player);
+void page_370(Player &player);
+void page_371(Player &player);
+void page_372(Player &player);
+void page_373(Player &player);
+void page_374(Player &player);
+void page_375(Player &player);
+void page_376(Player &player);
+void page_377(Player &player);
+void page_378(Player &player);
+void page_379(Player &player);
+void page_380(Player &player);
+void page_381(Player &player);
+void page_382(Player &player);
+void page_383(Player &player);
+void page_384(Player &player);
+void page_385(Player &player);
+void page_386(Player &player);
+void page_387(Player &player);
+void page_388(Player &player);
+void page_389(Player &player);
+void page_390(Player &player);
+void page_391(Player &player);
+void page_392(Player &player);
+void page_393(Player &player);
+void page_394(Player &player);
+void page_395(Player &player);
+void page_396(Player &player);
+void page_397(Player &player);
+void page_398(Player &player);
+void page_399(Player &player);
+void page_400(Player &player);
+
+int choice() {
+  int choice;
+  std::cout << "\n\nWhat will you choose? ";
+
+  while (true) {
+    std::cin >> choice;
+    if (!std::cin) {
+      std::cout << "\n\nInvalid Choice. Enter again ";
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      continue;
+    } else
+      break;
+  }
+
+  return choice;
+}
 
 void intro(Player &player) {
 
@@ -75,17 +498,17 @@ void intro(Player &player) {
                "take care of that for you.\n\n";
   std::cout
       << "\nSKILL score reflects your swordsmanship and general fighting "
-         "expertis; higher is better!\nSTAMINA score reflects your general "
+         "expertis; higher is better!\n\nSTAMINA score reflects your general "
          "constitution, your will to survive, your determiniation and overall "
-         "fitness; higher score will longer your survival.\nLUCK score "
-         "indicates how naturally luck you are as a person!\n";
+         "fitness; higher score will longer your survival.\n\nLUCK score "
+         "indicates how naturally luck you are as a person!\n\n";
 
   std::cout << "\n********************************";
   std::cout << "\nRolling for initial SKILL: " << player.initSkill;
   std::cout << "\nRolling for initial STAMINA: " << player.initStamina;
   std::cout << "\nRolling for initial LUCK: " << player.initLuck;
   std::cout << "\n********************************";
-  std::cout << "\nPress key to Continue...";
+  std::cout << "\n\nPress any key to Continue...\n";
   std::cin.get();
 
   std::cout << "\n---BATTLES---";
@@ -113,6 +536,8 @@ void intro(Player &player) {
          "sequence continues until the STAMINA score of either you or the "
          "creature you are fighting has been reduced to zero (death).";
 
+  std::cout << "\n\nPress any key to Continue...\n";
+  std::cin.get();
   std::cout << "\n\n---ESCAPING---\nSome situations you may be given the "
                "option of running away from a battle should things be going "
                "badly for you. However, if you do run away, the creature "
@@ -161,6 +586,8 @@ void intro(Player &player) {
          "taken a more serious blow. Subtract 1 extra STAMINA point.\nRemember "
          "that you must subtract 1 point from your onw LUCK score each time "
          "you Test your Luck.";
+  std::cout << "\n\nPress any key to Continue...\n";
+  std::cin.get();
   std::cout
       << "\n\n---RESTORING SKILL, STAMINA, AND LUCK---\n\n-SKILL-\nYour SKILL "
          "score will not change much during ou adventure. Occasionally, a page "
@@ -193,6 +620,8 @@ void intro(Player &player) {
          "instructed to do so. Drinking the Potion of Fortune will restore "
          "your LUCK to its Initial level at any time, and increase your "
          "Initial LUCK by 1 point.";
+  std::cout << "\n\nPress any key to Continue...\n";
+  std::cin.get();
   std::cout
       << "\n\n---EQUIPMENT AND POTIONS---\nYou will start your "
          "adventure with a bare minimum of equipment, but you may find "
@@ -214,6 +643,12 @@ void intro(Player &player) {
   do {
     std::cout << "\nPress 1, 2, or 3 to Choose starter Potion...";
     std::cin >> starterPotion;
+    if (!std::cin) {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      fflush(stdin);
+      // std::cin.get();
+    }
     switch (starterPotion) {
     case 1:
       std::cout << "Potion of SKILL added to inventory.\n";
@@ -241,13 +676,606 @@ void intro(Player &player) {
                "Initial LUCK score before LUCK is restored).\nEach bottle of "
                "potion contains enough for one measure, i.e. the "
                "characterisistc may be restored once during an adventure.";
+  std::cout << "\n\n---HINTS ON PLAY---\nThere is one true way through "
+               "Darkwood Forest and it will take you several attempts to find "
+               "it. Make notes and draw a map as you explore - this map will "
+               "be invaluable in future adventures and enable you to progress "
+               "rapidly through to unexplored sections.\nNot all areas contain "
+               "treasure; many merely contain traps and creatures which you "
+               "will no doubt fall foul of. There are many 'wild goose chase' "
+               "passages and while you may indeed progress through to you "
+               "rultimate desination, it is by no means certain that you will "
+               "find what you are searching for.\nThe one true way involves a "
+               "minimum of risk and any player, no matter how weak on initial "
+               "dice rolls, should be able to get through fairly easily.\nMay "
+               "the luck of the gods go with you on the adventure ahead!";
 }
 
+void background() {
+  std::cout
+      << "\n\n\n---BACKGROUND---\nYou are an adventurer, a sword for hire, and "
+         "have been roaming the northern borderlands of your kingdom. Having "
+         "always spurned the dullness of village life, you now wander the "
+         "lands in search of wealth and dager. Despite the long walks and "
+         "rough outdoor life you are content with your unknown destiny. The "
+         "world holds no fears for you as you are a skillful warrior, well "
+         "practised in the art of slaying evil men and beasts, with your "
+         "trusty sword. Not once during the last ten days since entering the "
+         "northern borderlands have you set eyes upon another person. This "
+         "does not worry you at all, as you are happy with your own company "
+         "and enjoy the slow, sunny days hunting, eating and sleeping\n\nIt is "
+         "evening, and having feasted on a dinner of rabbit, spit-roasted on "
+         "an open fire, you settle down to sleep beneath your sheepskin "
+         "blanket. There's a full moon, and the light sparkles on the blade o "
+         "f your broadsword skewered into the ground by your side. You gaze at "
+         "it, wondering when you will next have to wipe the blood of some vile "
+         "creature from its sharp edge. These are strange lands, inhabited by "
+         "weird and loathsome beasts - goblins, trolls and even dragons.\n\nAs "
+         "the flame of your camp fire gently dies, you begin to drift asleep, "
+         "and images of screaming, green-faced trolls flicker through your "
+         "mind. Suddenly, in the bushes to your left, you hear the load crack "
+         "of a twig breaking under a clumsy foot, You leap up and grab your "
+         "sword from the ground. You stand motionless but alert, ready to "
+         "pounce on your unseen adversary. Then you hear a groan, followed by "
+         "the dull thud of a body falling to the ground. Is it a trap? Slowly "
+         "you walk over to the bush where the noise is coming from and "
+         "carefully pull back the branches. You look down to see a little old "
+         "mand with  a great bushy beard, his face contorted with pain. You "
+         "crouch down to remove the iron helmet covering his balding head and "
+         "notice two crossbow bolts protruding from the stomach of his plump, "
+         "chainmail-clad torso. Picking him up, you carry him over to the fire "
+         "and stir the dying embers into life. After covering him with the "
+         "sheepskin blanket, you manage to get the old man to drink a little "
+         "water. He coughs and moans. He sits up rigid, eyes staring fixedly "
+         "ahead, and starts to shout.\n\n\"I'll get them! I'll get them! Don't "
+         "you fear, Gillibran, Bigleg is coming to bring you the hammer. Oh "
+         "yes, indeed I am. Oh Yes...\"\n\nThe dwarf, whose name you presume "
+         "to be Bigleg, is obviously delirious from the poison-tipped bolts "
+         "lodged in his stomach. You watch as he slumps down again to the "
+         "ground, then whispers his name in his ear. His eyes stare "
+         "unblinkingly at you, as he against starts to shout.\"Ambush! Look "
+         "out! Ambush! Aagh! The hammer! Take the hammer to Gillibran! Save "
+         "the dwarves!\"His eyes half close and the pain seems to ease a "
+         "little, and as the delirium subsides, he speaks to you again in a "
+         "low whisper.\n\n\"Help us, friend... take the hammer to Gillibran... "
+         "opnly the hammer will unite our people against the trolls... We were "
+         "on our way to Darkwood in search of the hammer... ambushed by the "
+         "little people... others killed... the map in my pouch will take you "
+         "to the home of Yaztromo, the master mage of these parts... he has  "
+         "great magics for sale to protect you against the creatures of "
+         "Darkwood... take my gold... I beg you to find the hammer and take it "
+         "to Gillibran, my Lord of Stonebridge... you will be well "
+         "rewarded...\"\n\nBigleg opens his mouth to start another sentence, "
+         "but nothing comes out except his last dying breath. You sit down and "
+         "ponder Bigleg's words. Who is Gillibran? Who is Yaztromo? What is "
+         "all the fuss about the dwarfish hammer? You reach over to th estill "
+         "ody of Bigleg and remove the pocuh from teh leather belt around his "
+         "waist. Inside you find 30 Gold Pieces and a map.";
+  std::cout << "\n\n*****\n30 Gold "
+               "Pieces "
+               "and Yaztromo's Map Added to your Inventory\n*****\n\n";
+  // std::cout << "\n\nPress any key to Continue...\n";
+  std::cin.get();
+  std::cout
+      << "Jingling the "
+         "coins in "
+         "your hand you think of the possible reward which may await you just "
+         "for returning a hammer to a village of dwarfs. You decide to try to "
+         "find the hammer in Darkwood Forest it's been a few weeks since your "
+         "last good battle, and, what is more, you are liekly to be well paid "
+         "for this one.\n\nWith your mind made up, you settle down to sleep, "
+         "having taken back the sheepskin blanket  from poor Bigleg. In the "
+         "morning you bury the old dwarf and gather up your possessions. You "
+         "examine the map, look up to the sun, and find your bearings. "
+         "Whistling merrily, you head off south at a good pace, eager to meet "
+         "the man Yaztromo and see what he has to offer.";
+  std::cout << "\n\nPress any key to Continue...\n";
+  std::cin.get();
+}
+
+void page_1(Player &player) {
+  std::cout
+      << "\n\nYour walk to Yaztromo's takes a little over half a day, and you "
+         "arrive at his stone tower home dirty and hungry. As the tower is set "
+         "back on the edges of Darkwood some fifty metrcs away from the path "
+         "you have been following, it is difficult to find. Finally you walk "
+         "up to the huge oak door, somewhat relieved to find that it does "
+         "exist and that Bigleg had not been speaking wildly in his delirium. "
+         "A large brass bell and gong hang from the stone archway. As you ring "
+         "the bell, a shiver runs clown your spine and you realize that the "
+         "loud 'bong' invades a deep silence, which you had not noticed "
+         "before. There are no sounds of birds or animals to be heard. You "
+         "wait anxiously at the door and hear slow footsteps descending stairs "
+         "from the tower above. A small wooden slot in the door slides open, "
+         "and two eyes appear and examine you.\n\"Well, who are you?\" demands "
+         "a grumpy voice through the hole.\n\nYou answer that you are an "
+         "adventurer in search of the master mage Yaztromo, intending to "
+         "purchase nagical items ftom him to combat the creatures of Darkwood "
+         "Forest. \n\n\"Oh ! Well in that case, if you are interested in "
+         "buying "
+         "some of my merchandise, you had better come up. I am Yaztromo.\"";
+  std::cout << "\n\nWill you:\n\n1. Follow him up the stairs?\n2. Draw your "
+               "sword and attack him?";
+  int pick = choice();
+  switch (pick) {
+  case 1:
+    page_261(player);
+    break;
+  case 2:
+    page_54(player);
+    break;
+  }
+}
+
+void page_2(Player &player) {}
+void page_3(Player &player) {}
+void page_4(Player &player) {}
+void page_5(Player &player) {}
+void page_6(Player &player) {}
+void page_7(Player &player) {}
+void page_8(Player &player) {}
+void page_9(Player &player) {}
+void page_10(Player &player) {}
+void page_11(Player &player) {}
+void page_12(Player &player) {}
+void page_13(Player &player) {}
+void page_14(Player &player) {}
+void page_15(Player &player) {}
+void page_16(Player &player) {}
+void page_17(Player &player) {}
+void page_18(Player &player) {}
+void page_19(Player &player) {}
+void page_20(Player &player) {}
+void page_21(Player &player) {}
+void page_22(Player &player) {}
+void page_23(Player &player) {}
+void page_24(Player &player) {}
+void page_25(Player &player) {}
+void page_26(Player &player) {}
+void page_27(Player &player) {}
+void page_28(Player &player) {}
+void page_29(Player &player) {}
+void page_30(Player &player) {}
+void page_31(Player &player) {}
+void page_32(Player &player) {}
+void page_33(Player &player) {}
+void page_34(Player &player) {}
+void page_35(Player &player) {}
+void page_36(Player &player) {}
+void page_37(Player &player) {}
+void page_38(Player &player) {}
+void page_39(Player &player) {}
+void page_40(Player &player) {}
+void page_41(Player &player) {}
+void page_42(Player &player) {}
+void page_43(Player &player) {}
+void page_44(Player &player) {}
+void page_45(Player &player) {}
+void page_46(Player &player) {}
+void page_47(Player &player) {}
+void page_48(Player &player) {}
+void page_49(Player &player) {}
+void page_50(Player &player) {}
+void page_51(Player &player) {}
+void page_52(Player &player) {}
+void page_53(Player &player) {}
+void page_54(Player &player) {}
+void page_55(Player &player) {}
+void page_56(Player &player) {}
+void page_57(Player &player) {}
+void page_58(Player &player) {}
+void page_59(Player &player) {}
+void page_60(Player &player) {}
+void page_61(Player &player) {}
+void page_62(Player &player) {}
+void page_63(Player &player) {}
+void page_64(Player &player) {}
+void page_65(Player &player) {}
+void page_66(Player &player) {}
+void page_67(Player &player) {}
+void page_68(Player &player) {}
+void page_69(Player &player) {}
+void page_70(Player &player) {}
+void page_71(Player &player) {}
+void page_72(Player &player) {}
+void page_73(Player &player) {}
+void page_74(Player &player) {}
+void page_75(Player &player) {}
+void page_76(Player &player) {}
+void page_77(Player &player) {}
+void page_78(Player &player) {}
+void page_79(Player &player) {}
+void page_80(Player &player) {}
+void page_81(Player &player) {}
+void page_82(Player &player) {}
+void page_83(Player &player) {}
+void page_84(Player &player) {}
+void page_85(Player &player) {}
+void page_86(Player &player) {}
+void page_87(Player &player) {}
+void page_88(Player &player) {}
+void page_89(Player &player) {}
+void page_90(Player &player) {}
+void page_91(Player &player) {}
+void page_92(Player &player) {}
+void page_93(Player &player) {}
+void page_94(Player &player) {}
+void page_95(Player &player) {}
+void page_96(Player &player) {}
+void page_97(Player &player) {}
+void page_98(Player &player) {}
+void page_99(Player &player) {}
+void page_100(Player &player) {}
+void page_101(Player &player) {}
+void page_102(Player &player) {}
+void page_103(Player &player) {}
+void page_104(Player &player) {}
+void page_105(Player &player) {}
+void page_106(Player &player) {}
+void page_107(Player &player) {}
+void page_108(Player &player) {}
+void page_109(Player &player) {}
+void page_110(Player &player) {}
+void page_111(Player &player) {}
+void page_112(Player &player) {}
+void page_113(Player &player) {}
+void page_114(Player &player) {}
+void page_115(Player &player) {}
+void page_116(Player &player) {}
+void page_117(Player &player) {}
+void page_118(Player &player) {}
+void page_119(Player &player) {}
+void page_120(Player &player) {}
+void page_121(Player &player) {}
+void page_122(Player &player) {}
+void page_123(Player &player) {}
+void page_124(Player &player) {}
+void page_125(Player &player) {}
+void page_126(Player &player) {}
+void page_127(Player &player) {}
+void page_128(Player &player) {}
+void page_129(Player &player) {}
+void page_130(Player &player) {}
+void page_131(Player &player) {}
+void page_132(Player &player) {}
+void page_133(Player &player) {}
+void page_134(Player &player) {}
+void page_135(Player &player) {}
+void page_136(Player &player) {}
+void page_137(Player &player) {}
+void page_138(Player &player) {}
+void page_139(Player &player) {}
+void page_140(Player &player) {}
+void page_141(Player &player) {}
+void page_142(Player &player) {}
+void page_143(Player &player) {}
+void page_144(Player &player) {}
+void page_145(Player &player) {}
+void page_146(Player &player) {}
+void page_147(Player &player) {}
+void page_148(Player &player) {}
+void page_149(Player &player) {}
+void page_150(Player &player) {}
+void page_151(Player &player) {}
+void page_152(Player &player) {}
+void page_153(Player &player) {}
+void page_154(Player &player) {}
+void page_155(Player &player) {}
+void page_156(Player &player) {}
+void page_157(Player &player) {}
+void page_158(Player &player) {}
+void page_159(Player &player) {}
+void page_160(Player &player) {}
+void page_161(Player &player) {}
+void page_162(Player &player) {}
+void page_163(Player &player) {}
+void page_164(Player &player) {}
+void page_165(Player &player) {}
+void page_166(Player &player) {}
+void page_167(Player &player) {}
+void page_168(Player &player) {}
+void page_169(Player &player) {}
+void page_170(Player &player) {}
+void page_171(Player &player) {}
+void page_172(Player &player) {}
+void page_173(Player &player) {}
+void page_174(Player &player) {}
+void page_175(Player &player) {}
+void page_176(Player &player) {}
+void page_177(Player &player) {}
+void page_178(Player &player) {}
+void page_179(Player &player) {}
+void page_180(Player &player) {}
+void page_181(Player &player) {}
+void page_182(Player &player) {}
+void page_183(Player &player) {}
+void page_184(Player &player) {}
+void page_185(Player &player) {}
+void page_186(Player &player) {}
+void page_187(Player &player) {}
+void page_188(Player &player) {}
+void page_189(Player &player) {}
+void page_190(Player &player) {}
+void page_191(Player &player) {}
+void page_192(Player &player) {}
+void page_193(Player &player) {}
+void page_194(Player &player) {}
+void page_195(Player &player) {}
+void page_196(Player &player) {}
+void page_197(Player &player) {}
+void page_198(Player &player) {}
+void page_199(Player &player) {}
+void page_200(Player &player) {}
+void page_201(Player &player) {}
+void page_202(Player &player) {}
+void page_203(Player &player) {}
+void page_204(Player &player) {}
+void page_205(Player &player) {}
+void page_206(Player &player) {}
+void page_207(Player &player) {}
+void page_208(Player &player) {}
+void page_209(Player &player) {}
+void page_210(Player &player) {}
+void page_211(Player &player) {}
+void page_212(Player &player) {}
+void page_213(Player &player) {}
+void page_214(Player &player) {}
+void page_215(Player &player) {}
+void page_216(Player &player) {}
+void page_217(Player &player) {}
+void page_218(Player &player) {}
+void page_219(Player &player) {}
+void page_220(Player &player) {}
+void page_221(Player &player) {}
+void page_222(Player &player) {}
+void page_223(Player &player) {}
+void page_224(Player &player) {}
+void page_225(Player &player) {}
+void page_226(Player &player) {}
+void page_227(Player &player) {}
+void page_228(Player &player) {}
+void page_229(Player &player) {}
+void page_230(Player &player) {}
+void page_231(Player &player) {}
+void page_232(Player &player) {}
+void page_233(Player &player) {}
+void page_234(Player &player) {}
+void page_235(Player &player) {}
+void page_236(Player &player) {}
+void page_237(Player &player) {}
+void page_238(Player &player) {}
+void page_239(Player &player) {}
+void page_240(Player &player) {}
+void page_241(Player &player) {}
+void page_242(Player &player) {}
+void page_243(Player &player) {}
+void page_244(Player &player) {}
+void page_245(Player &player) {}
+void page_246(Player &player) {}
+void page_247(Player &player) {}
+void page_248(Player &player) {}
+void page_249(Player &player) {}
+void page_250(Player &player) {}
+void page_251(Player &player) {}
+void page_252(Player &player) {}
+void page_253(Player &player) {}
+void page_254(Player &player) {}
+void page_255(Player &player) {}
+void page_256(Player &player) {}
+void page_257(Player &player) {}
+void page_258(Player &player) {}
+void page_259(Player &player) {}
+void page_260(Player &player) {}
+void page_261(Player &player) {
+  std::cout << "\n\nYou follow the huffing and puffing old man in his tattered "
+               "robes up the spiral staircase to a large room at the top of "
+               "the tower. Shelves, cupboards and cabinets line the walls, all "
+               "filled with bottles, jars, weapons, armour and all manner of "
+               "strange artifacts. Yaztromo shuffles past the general clutter "
+               "and slumps down in and old oak chair. He reaches into his top "
+               "pocket and pulls out a fragile pair of gold-rimmed spectacles. "
+               "Placing these on his nose, he picks up a piece of slate and "
+               "chalk from a table next to his chair and begins to write "
+               "frantically. He then hands you the slate.\n\n";
+  std::cout << "\t     ITEM\t\t\t\t\t     COST" << std::endl;
+  std::cout << "1.\tPotion of Healing\t\t\t\t3 Gold Pieces" << std::endl;
+  std::cout << "2.\tPotion of Plant Control\t\t\t\t2 Gold Pieces" << std::endl;
+  std::cout << "3.\tPotion of Stillness\t\t\t\t3 Gold Pieces" << std::endl;
+  std::cout << "4.\tPotion of Insect Control\t\t\t2 Gold Pieces" << std::endl;
+  std::cout << "5.\tPotion of Anti-Poison\t\t\t\t2 Gold Pieces" << std::endl;
+  std::cout << "6.\tHoly Water\t\t\t\t\t3 Gold Pieces" << std::endl;
+  std::cout << "7.\tRing of Light\t\t\t\t\t3 Gold Pieces" << std::endl;
+  std::cout << "8.\tBoots of Leaping\t\t\t\t2 Gold Pieces" << std::endl;
+  std::cout << "9.\tRope of Climbing\t\t\t\t3 Gold Pieces" << std::endl;
+  std::cout << "10.\tNet of Entanglement\t\t\t\t3 Gold Pieces" << std::endl;
+  std::cout << "11.\tArmband of Strength\t\t\t\t3 Gold Pieces" << std::endl;
+  std::cout << "12.\tGlove of Missile Dexterity\t\t\t2 Gold Pieces"
+            << std::endl;
+  std::cout << "13.\tRod of Water-finding\t\t\t\t2 Gold Pieces" << std::endl;
+  std::cout << "14.\tGarlic Buds\t\t\t\t\t2 Gold Pieces" << std::endl;
+  std::cout << "15.\tHeadband of Concentration\t\t\t3 Gold Pieces" << std::endl;
+  std::cout << "16.\tFire Capsules\t\t\t\t\t3 Gold Pieces" << std::endl;
+  std::cout << "17.\tNose Filters\t\t\t\t\t3 Gold Pieces" << std::endl;
+
+  std::cout << "\nWhat items will you Purchse?" << std::endl;
+
+  std::cout << "\n\nHe tells you that all the instructions for use are written "
+               "clearly on the labels attached to the items, together with "
+               "their suggested use. He sighs and tell you that unfortunately "
+               "the magic in the items only works once, but they are the best "
+               "you can buy for the money.";
+  std::cout
+      << "\n\nIf you decide to buy any of the items, pay for them by reducing "
+         "the amount of Gold on your Inventory Sheet and add the items to the "
+         "relevant sections on it. Yaztromo then asks you the reason for the "
+         "purchase of the items, and you tell him your story and your decision "
+         "to continue the quest of the luckless Bigleg. \"Ah yes\" Yaztromo "
+         "say slowly, rubbing his chin, \"I heard that the good dwarfs of "
+         "Stonebridge had lost their fabled war-hammer. Without it, their king "
+         "is unable to arouse his people, despite the fact that the hill "
+         "trolls threaten their village. Rumour has it that an envious king of "
+         "another village of dwarfs sent and eagle to Stonebridge to steal the "
+         "hammer, which it managed to do. But as it flew back over Darkwood, "
+         "it was attacked by death hawks and the hammer dropped into the "
+         "forest and was lost. Appearently, two forest goblins found the "
+         "hammer but could not decide who was to keep it. They wrestled fo "
+         "hours but gave up. Then they discovered that the handle unscrewed "
+         "from the head, and the arguement was settled. One kept the head, the "
+         "other kept the handle. Then they parted, each happy with his new "
+         "treasure. Who knows if they still have them. So I'm afraid your "
+         "problems are doubled. I can tell you that the head is made of bronze "
+         "and the handle is made of polished ebony. Both head and handle have "
+         "the letter G inscrubed on them. Your task is not easy. Good "
+         "luck.\"\n\nYou thank Yaztromo and leave the room by the spiral "
+         "staircase.";
+}
+void page_262(Player &player) {}
+void page_263(Player &player) {}
+void page_264(Player &player) {}
+void page_265(Player &player) {}
+void page_266(Player &player) {}
+void page_267(Player &player) {}
+void page_268(Player &player) {}
+void page_269(Player &player) {}
+void page_270(Player &player) {}
+void page_271(Player &player) {}
+void page_272(Player &player) {}
+void page_273(Player &player) {}
+void page_274(Player &player) {}
+void page_275(Player &player) {}
+void page_276(Player &player) {}
+void page_277(Player &player) {}
+void page_278(Player &player) {}
+void page_279(Player &player) {}
+void page_280(Player &player) {}
+void page_281(Player &player) {}
+void page_282(Player &player) {}
+void page_283(Player &player) {}
+void page_284(Player &player) {}
+void page_285(Player &player) {}
+void page_286(Player &player) {}
+void page_287(Player &player) {}
+void page_288(Player &player) {}
+void page_289(Player &player) {}
+void page_290(Player &player) {}
+void page_291(Player &player) {}
+void page_292(Player &player) {}
+void page_293(Player &player) {}
+void page_294(Player &player) {}
+void page_295(Player &player) {}
+void page_296(Player &player) {}
+void page_297(Player &player) {}
+void page_298(Player &player) {}
+void page_299(Player &player) {}
+void page_300(Player &player) {}
+void page_301(Player &player) {}
+void page_302(Player &player) {}
+void page_303(Player &player) {}
+void page_304(Player &player) {}
+void page_305(Player &player) {}
+void page_306(Player &player) {}
+void page_307(Player &player) {}
+void page_308(Player &player) {}
+void page_309(Player &player) {}
+void page_310(Player &player) {}
+void page_311(Player &player) {}
+void page_312(Player &player) {}
+void page_313(Player &player) {}
+void page_314(Player &player) {}
+void page_315(Player &player) {}
+void page_316(Player &player) {}
+void page_317(Player &player) {}
+void page_318(Player &player) {}
+void page_319(Player &player) {}
+void page_320(Player &player) {}
+void page_321(Player &player) {}
+void page_322(Player &player) {}
+void page_323(Player &player) {}
+void page_324(Player &player) {}
+void page_325(Player &player) {}
+void page_326(Player &player) {}
+void page_327(Player &player) {}
+void page_328(Player &player) {}
+void page_329(Player &player) {}
+void page_330(Player &player) {}
+void page_331(Player &player) {}
+void page_332(Player &player) {}
+void page_333(Player &player) {}
+void page_334(Player &player) {}
+void page_335(Player &player) {}
+void page_336(Player &player) {}
+void page_337(Player &player) {}
+void page_338(Player &player) {}
+void page_339(Player &player) {}
+void page_340(Player &player) {}
+void page_341(Player &player) {}
+void page_342(Player &player) {}
+void page_343(Player &player) {}
+void page_344(Player &player) {}
+void page_345(Player &player) {}
+void page_346(Player &player) {}
+void page_347(Player &player) {}
+void page_348(Player &player) {}
+void page_349(Player &player) {}
+void page_350(Player &player) {}
+void page_351(Player &player) {}
+void page_352(Player &player) {}
+void page_353(Player &player) {}
+void page_354(Player &player) {}
+void page_355(Player &player) {}
+void page_356(Player &player) {}
+void page_357(Player &player) {}
+void page_358(Player &player) {}
+void page_359(Player &player) {}
+void page_360(Player &player) {}
+void page_361(Player &player) {}
+void page_362(Player &player) {}
+void page_363(Player &player) {}
+void page_364(Player &player) {}
+void page_365(Player &player) {}
+void page_366(Player &player) {}
+void page_367(Player &player) {}
+void page_368(Player &player) {}
+void page_369(Player &player) {}
+void page_370(Player &player) {}
+void page_371(Player &player) {}
+void page_372(Player &player) {}
+void page_373(Player &player) {}
+void page_374(Player &player) {}
+void page_375(Player &player) {}
+void page_376(Player &player) {}
+void page_377(Player &player) {}
+void page_378(Player &player) {}
+void page_379(Player &player) {}
+void page_380(Player &player) {}
+void page_381(Player &player) {}
+void page_382(Player &player) {}
+void page_383(Player &player) {}
+void page_384(Player &player) {}
+void page_385(Player &player) {}
+void page_386(Player &player) {}
+void page_387(Player &player) {}
+void page_388(Player &player) {}
+void page_389(Player &player) {}
+void page_390(Player &player) {}
+void page_391(Player &player) {}
+void page_392(Player &player) {}
+void page_393(Player &player) {}
+void page_394(Player &player) {}
+void page_395(Player &player) {}
+void page_396(Player &player) {}
+void page_397(Player &player) {}
+void page_398(Player &player) {}
+void page_399(Player &player) {}
+void page_400(Player &player) {}
 int main() {
 
   Player player;
 
   intro(player);
+  background();
+
+  page_1(player);
 
   return 0;
 }
