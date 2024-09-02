@@ -20,6 +20,11 @@ public:
   // Current Luck, based on initLuck.
   int currLuck = 0;
 
+  // 1 Potion of SKILL
+  // 2 Potion of STRENGTH
+  // 3 Potion of LUCK
+  int starterPotion = 0;
+
   Player() {
     srand(time(NULL));
 
@@ -206,14 +211,20 @@ void intro(Player &player) {
          "*****************\n";
   std::cout << "\nPress 1, 2, or 3 to Choose starter Potion...";
   int starterPotion = 0;
-  std::cin.get();
+  std::cin >> starterPotion;
   switch (starterPotion) {
   case 1:
     std::cout << "Potion of SKILL added to inventory.";
+    player.starterPotion = 1;
+    break;
   case 2:
     std::cout << "Potion of STAMINA added to inventory.";
+    player.starterPotion = 2;
+    break;
   case 3:
     std::cout << "Potion of LUCK added to inventory.";
+    player.starterPotion = 3;
+    break;
   }
 }
 
