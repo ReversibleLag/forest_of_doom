@@ -200,7 +200,8 @@ void intro(Player &player) {
          "sword and are dressed in leather armour. You have a backpack "
          "to hold your Provisions and any treasures you may come across.\nIn "
          "addition, you may take one bottle of a magical potion which will aid "
-         "you on your quest. You may choose to take a bottle of any of the "
+         "you on your quest. You may choose to take only one bottle of any of "
+         "the "
          "following:\n*********************************************************"
          "***********************\n\t1. A Potion "
          "of Skill - restores "
@@ -209,23 +210,37 @@ void intro(Player &player) {
          "restores LUCK points and adds 1 to Initial "
          "LUCK\n***************************************************************"
          "*****************\n";
-  std::cout << "\nPress 1, 2, or 3 to Choose starter Potion...";
   int starterPotion = 0;
-  std::cin >> starterPotion;
-  switch (starterPotion) {
-  case 1:
-    std::cout << "Potion of SKILL added to inventory.";
-    player.starterPotion = 1;
-    break;
-  case 2:
-    std::cout << "Potion of STAMINA added to inventory.";
-    player.starterPotion = 2;
-    break;
-  case 3:
-    std::cout << "Potion of LUCK added to inventory.";
-    player.starterPotion = 3;
-    break;
-  }
+  do {
+    std::cout << "\nPress 1, 2, or 3 to Choose starter Potion...";
+    std::cin >> starterPotion;
+    switch (starterPotion) {
+    case 1:
+      std::cout << "Potion of SKILL added to inventory.\n";
+      player.starterPotion = 1;
+      break;
+    case 2:
+      std::cout << "Potion of STAMINA added to inventory.\n";
+      player.starterPotion = 2;
+      break;
+    case 3:
+      std::cout << "Potion of LUCK added to inventory.\n";
+      player.starterPotion = 3;
+      break;
+    default:
+      std::cout << "Invalid Input. Please press keys 1, 2, or 3 for a starter "
+                   "potion.";
+    }
+  } while ((starterPotion != 1) && (starterPotion != 2) &&
+           (starterPotion != 3));
+
+  std::cout << "\nThese potions may be taken at any time during your adventure "
+               "(except when engaged in Battle). Taking a measure of potion "
+               "will restore SKILL, STAMINA or LUCK scores to their Intial "
+               "level (and the Poption of Fortune will add 1 point to your "
+               "Initial LUCK score before LUCK is restored).\nEach bottle of "
+               "potion contains enough for one measure, i.e. the "
+               "characterisistc may be restored once during an adventure.";
 }
 
 int main() {
