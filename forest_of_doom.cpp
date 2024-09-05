@@ -1,6 +1,23 @@
+#include <cstdlib>
 #include <iostream>
 #include <limits>
 #include <stdlib.h>
+#include <string>
+#include <vector>
+
+struct Item {
+  Item(const std::string &name, int price) : _name{name}, _price{price} {}
+
+  friend std::ostream &operator<<(std::ostream &out, Item &item) {
+    out << item._name << "\t\t\t\t\t" << item._price << "\n";
+    return out;
+  }
+
+private:
+  std::string _name;
+  int _price;
+};
+
 class Player {
 
 public:
@@ -443,24 +460,42 @@ void page_398(Player &player);
 void page_399(Player &player);
 void page_400(Player &player);
 
+// int choice() {
+//   int choice;
+//   std::cout << "\n\nWhat will you choose? ";
+//
+//   while (true) {
+//     std::cin >> choice;
+//     // std::string temp;
+//     // std::getline(std::cin, temp);
+//     // choice = std::strtol(temp);
+//     if (!std::cin) {
+//       std::cout << "\n\nInvalid Choice. Enter again ";
+//       std::cin.clear();
+//       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+//       continue;
+//     } else
+//       break;
+//   }
+//
+//   return choice;
+// }
 int choice() {
-  int choice;
-  std::cout << "\n\nWhat will you choose? ";
-
+  int n;
+  std::string temp;
+  std::cout << "Enter: ";
   while (true) {
-    std::cin >> choice;
-    if (!std::cin) {
-      std::cout << "\n\nInvalid Choice. Enter again ";
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      continue;
-    } else
+    std::getline(std::cin, temp);
+    try {
+      n = std::stoi(temp);
       break;
+    } catch (...) {
+      std::cout << "Enter again: ";
+    }
   }
 
-  return choice;
+  return n;
 }
-
 void intro(Player &player) {
 
   std::cout << "Welcome to the Forest of Doom!\nBased on Ian Liviningstone's "
@@ -696,17 +731,17 @@ void background() {
       << "\n\n\n---BACKGROUND---\nYou are an adventurer, a sword for hire, and "
          "have been roaming the northern borderlands of your kingdom. Having "
          "always spurned the dullness of village life, you now wander the "
-         "lands in search of wealth and dager. Despite the long walks and "
+         "lands in search of wealth and danger. Despite the long walks and "
          "rough outdoor life you are content with your unknown destiny. The "
          "world holds no fears for you as you are a skillful warrior, well "
-         "practised in the art of slaying evil men and beasts, with your "
+         "practiced in the art of slaying evil men and beasts, with your "
          "trusty sword. Not once during the last ten days since entering the "
          "northern borderlands have you set eyes upon another person. This "
          "does not worry you at all, as you are happy with your own company "
          "and enjoy the slow, sunny days hunting, eating and sleeping\n\nIt is "
          "evening, and having feasted on a dinner of rabbit, spit-roasted on "
          "an open fire, you settle down to sleep beneath your sheepskin "
-         "blanket. There's a full moon, and the light sparkles on the blade o "
+         "blanket. There's a full moon, and the light sparkles on the blade o"
          "f your broadsword skewered into the ground by your side. You gaze at "
          "it, wondering when you will next have to wipe the blood of some vile "
          "creature from its sharp edge. These are strange lands, inhabited by "
@@ -720,7 +755,7 @@ void background() {
          "the dull thud of a body falling to the ground. Is it a trap? Slowly "
          "you walk over to the bush where the noise is coming from and "
          "carefully pull back the branches. You look down to see a little old "
-         "mand with  a great bushy beard, his face contorted with pain. You "
+         "man with a great bushy beard, his face contorted with pain. You "
          "crouch down to remove the iron helmet covering his balding head and "
          "notice two crossbow bolts protruding from the stomach of his plump, "
          "chainmail-clad torso. Picking him up, you carry him over to the fire "
@@ -791,7 +826,7 @@ void page_1(Player &player) {
          "a grumpy voice through the hole.\n\nYou answer that you are an "
          "adventurer in search of the master mage Yaztromo, intending to "
          "purchase nagical items ftom him to combat the creatures of Darkwood "
-         "Forest. \n\n\"Oh ! Well in that case, if you are interested in "
+         "Forest. \n\n\"Oh! Well in that case, if you are interested in "
          "buying "
          "some of my merchandise, you had better come up. I am Yaztromo.\"";
   std::cout << "\n\nWill you:\n\n1. Follow him up the stairs?\n2. Draw your "
@@ -1067,6 +1102,43 @@ void page_258(Player &player) {}
 void page_259(Player &player) {}
 void page_260(Player &player) {}
 void page_261(Player &player) {
+  int pick = -1;
+  // std::vector<std::string> items = {
+  //     "\tPotion of Healing\t\t\t\t3 Gold Pieces",
+  //     "\tPotion of Plant Control\t\t\t\t2 Gold Pieces",
+  //     "\tPotion of Stillness\t\t\t\t3 Gold Pieces",
+  //     "\tPotion of Insect Control\t\t\t2 Gold Pieces",
+  //     "\tPotion of Anti-Poison\t\t\t\t2 Gold Pieces",
+  //     "\tHoly Water\t\t\t\t\t3 Gold Pieces",
+  //     "\tRing of Light\t\t\t\t\t3 Gold Pieces",
+  //     "\tBoots of Leaping\t\t\t\t2 Gold Pieces",
+  //     "\tRope of Climbing\t\t\t\t3 Gold Pieces",
+  //     "\tNet of Entanglement\t\t\t\t3 Gold Pieces",
+  //     "\tArmband of Strength\t\t\t\t3 Gold Pieces",
+  //     "\tGlove of Missile Dexterity\t\t\t2 Gold Pieces",
+  //     "\tRod of Water-finding\t\t\t\t2 Gold Pieces",
+  //     "\tGarlic Buds\t\t\t\t\t2 Gold Pieces",
+  //     "\tHeadband of Concentration\t\t\t3 Gold Pieces",
+  //     "\tFire Capsules\t\t\t\t\t3 Gold Pieces",
+  //     "\tNose Filters\t\t\t\t\t3 Gold Pieces"};
+  std::vector<Item> items = {{"Potion of Healing", 3},
+                             {"Potion of Plant Control", 2},
+                             {"Potion of Stillness", 3},
+                             {"Potion of Insect Control", 2},
+                             {"Potion of Anti-Poison", 2},
+                             {"Holy Water", 3},
+                             {"Ring of Light", 3},
+                             {"Boots of Leaping", 2},
+                             {"Rope of Climbing", 3},
+                             {"Net of Entanglement", 3},
+                             {"Armband of Strength", 3},
+                             {"Glove of Missile Dexterity", 2},
+                             {"Rod of Water-finding", 2},
+                             {"Garlic Buds", 2},
+                             {"Headband of Concentration", 3},
+                             {"Fire Capsules", 3},
+                             {"Nose Filter", 3}};
+
   std::cout << "\n\nYou follow the huffing and puffing old man in his tattered "
                "robes up the spiral staircase to a large room at the top of "
                "the tower. Shelves, cupboards and cabinets line the walls, all "
@@ -1077,28 +1149,27 @@ void page_261(Player &player) {
                "Placing these on his nose, he picks up a piece of slate and "
                "chalk from a table next to his chair and begins to write "
                "frantically. He then hands you the slate.\n\n";
-  std::cout << "\t     ITEM\t\t\t\t\t     COST" << std::endl;
-  std::cout << "1.\tPotion of Healing\t\t\t\t3 Gold Pieces" << std::endl;
-  std::cout << "2.\tPotion of Plant Control\t\t\t\t2 Gold Pieces" << std::endl;
-  std::cout << "3.\tPotion of Stillness\t\t\t\t3 Gold Pieces" << std::endl;
-  std::cout << "4.\tPotion of Insect Control\t\t\t2 Gold Pieces" << std::endl;
-  std::cout << "5.\tPotion of Anti-Poison\t\t\t\t2 Gold Pieces" << std::endl;
-  std::cout << "6.\tHoly Water\t\t\t\t\t3 Gold Pieces" << std::endl;
-  std::cout << "7.\tRing of Light\t\t\t\t\t3 Gold Pieces" << std::endl;
-  std::cout << "8.\tBoots of Leaping\t\t\t\t2 Gold Pieces" << std::endl;
-  std::cout << "9.\tRope of Climbing\t\t\t\t3 Gold Pieces" << std::endl;
-  std::cout << "10.\tNet of Entanglement\t\t\t\t3 Gold Pieces" << std::endl;
-  std::cout << "11.\tArmband of Strength\t\t\t\t3 Gold Pieces" << std::endl;
-  std::cout << "12.\tGlove of Missile Dexterity\t\t\t2 Gold Pieces"
-            << std::endl;
-  std::cout << "13.\tRod of Water-finding\t\t\t\t2 Gold Pieces" << std::endl;
-  std::cout << "14.\tGarlic Buds\t\t\t\t\t2 Gold Pieces" << std::endl;
-  std::cout << "15.\tHeadband of Concentration\t\t\t3 Gold Pieces" << std::endl;
-  std::cout << "16.\tFire Capsules\t\t\t\t\t3 Gold Pieces" << std::endl;
-  std::cout << "17.\tNose Filters\t\t\t\t\t3 Gold Pieces" << std::endl;
+  do {
+    std::cout << "\t     ITEM\t\t\t\t\t     COST" << std::endl;
+    for (int i = 0; i < items.size(); i++) {
+      // std::cout << items[i];
+      std::cout << i + 1 << ". " << items[i];
+    }
+    std::cout << "\n0. Exit" << std::endl;
+    std::cout << "\nWhat items will you Purchase?" << std::endl;
+    std::cout << "\nCurrent gold: " << player.gold << std::endl;
+    pick = choice();
 
-  std::cout << "\nWhat items will you Purchse?" << std::endl;
+    for (int i = 0; i < items.size(); i++) {
+      // std::cout << items[i];
+      if (pick == i) {
+        std::cout << "******************";
+        items.erase(items.begin());
+        std::cout << i + 1 << ". " << items[i];
+      }
+    }
 
+  } while (pick != 0);
   std::cout << "\n\nHe tells you that all the instructions for use are written "
                "clearly on the labels attached to the items, together with "
                "their suggested use. He sighs and tell you that unfortunately "
