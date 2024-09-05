@@ -62,6 +62,7 @@ public:
 void intro(Player &player);
 void background();
 int choice();
+void viewInventory(Player &player);
 void page_1(Player &player);
 void page_2(Player &player);
 void page_3(Player &player);
@@ -499,6 +500,19 @@ int choice() {
 
   return n;
 }
+
+void viewInventory(Player &player) {
+  std::cout << "\n***** INVENTORY *****\n";
+  // for (const auto &item : player.inventory) {
+  //   std::cout
+  //       << item
+  //       << std::endl; // Assuming player.inventory is a list of strings/items
+  // }
+  std::cout << "\nPress Enter to return to the previous menu...\n";
+  // std::cin.ignore();
+  std::cin.get(); // Wait for the user to press enter
+}
+
 void intro(Player &player) {
 
   std::cout << "Welcome to the Forest of Doom!\nBased on Ian Liviningstone's "
@@ -1020,7 +1034,45 @@ void page_173(Player &player) {}
 void page_174(Player &player) {}
 void page_175(Player &player) {}
 void page_176(Player &player) {}
-void page_177(Player &player) {}
+void page_177(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout
+        << "\n\nOutside in the bright light you notice the dead quietness "
+           "again. "
+           "A narrow path leads northwards from the tall grass surrounding "
+           "Yaztromo's tower into the dense undergrowth of Darkwood Forest. In "
+           "a "
+           "few strides you are surrounded by the dark and tangled forest; "
+           "stones and knotted roots seem to hide in the shadows and you can "
+           "almost believe that they are trying to trip you up. The light "
+           "fades "
+           "quickly and the air becomes moist and unpleasant. Deeper and "
+           "deeper "
+           "you go, into the gloom. Eventually the path forks on either side "
+           "of "
+           "a huge old tree.";
+
+    std::cout << "\n\nWhat will you do: \n1. To Go WEST\n2. To Go EAST\n3. "
+                 "View INVENTORY\n";
+    pick = choice();
+
+    switch (pick) {
+    case 1:
+      page_289(player);
+      return; // Exit the loop and function after making a choice
+    case 2:
+      page_160(player);
+      return; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
 void page_178(Player &player) {}
 void page_179(Player &player) {}
 void page_180(Player &player) {}
@@ -1137,6 +1189,19 @@ void page_261(Player &player) {
                "frantically. He then hands you the slate.\n\n";
 
   do {
+    // bool canAffordItem = false;
+    //
+    // for (int i = 0; i < items.size(); i++) {
+    //   if (player.gold >= items[i].getPrice()) {
+    //     canAffordItem = true;
+    //     break;
+    //   }
+    // }
+    //
+    // if (!canAffordItem) {
+    //   std::cout << "\n\nYou don't have enough gold for any more items!\n\n";
+    //   break;
+    // }
 
     std::cout << "\t     ITEM\t\t\t\t\t     COST" << std::endl;
     for (int i = 0; i < items.size(); i++) {
@@ -1148,9 +1213,12 @@ void page_261(Player &player) {
     std::cout << "\nCurrent gold: " << player.gold << std::endl;
     pick = choice();
 
+    if (pick == 0) {
+      break;
+    }
     for (int i = 0; i <= items.size(); i++) {
       if (pick == i) {
-        std::cout << pick << " ---- " << i;
+        // std::cout << pick << " ---- " << i;
         if (player.gold >= items[i].getPrice()) {
           std::cout << "\n*******\n"
                     << items[i - 1].getName() << " Added to your Inventory for "
@@ -1158,12 +1226,13 @@ void page_261(Player &player) {
           player.gold -= items[i - 1].getPrice();
           items.erase(items.begin() + i - 1);
         } else {
-          std::cout << "\n\nYou are out of Gold!\n";
+          std::cout << "\n\nYou are out of Gold!\n\n";
+          pick = 0;
           break;
         }
       }
     }
-  } while (pick != 0);
+  } while (true);
   std::cout << "\n\nHe tells you that all the instructions for use are written "
                "clearly on the labels attached to the items, together with "
                "their suggested use. He sighs and tell you that unfortunately "
@@ -1193,6 +1262,7 @@ void page_261(Player &player) {
          "the letter G inscrubed on them. Your task is not easy. Good "
          "luck.\"\n\nYou thank Yaztromo and leave the room by the spiral "
          "staircase.";
+  page_177(player);
 }
 void page_262(Player &player) {}
 void page_263(Player &player) {}
