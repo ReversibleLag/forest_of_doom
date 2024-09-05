@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cstdlib>
 #include <iostream>
 #include <limits>
@@ -830,7 +831,7 @@ void page_1(Player &player) {
          "buying "
          "some of my merchandise, you had better come up. I am Yaztromo.\"";
   std::cout << "\n\nWill you:\n\n1. Follow him up the stairs?\n2. Draw your "
-               "sword and attack him?";
+               "sword and attack him?\n";
   int pick = choice();
   switch (pick) {
   case 1:
@@ -1103,24 +1104,7 @@ void page_259(Player &player) {}
 void page_260(Player &player) {}
 void page_261(Player &player) {
   int pick = -1;
-  // std::vector<std::string> items = {
-  //     "\tPotion of Healing\t\t\t\t3 Gold Pieces",
-  //     "\tPotion of Plant Control\t\t\t\t2 Gold Pieces",
-  //     "\tPotion of Stillness\t\t\t\t3 Gold Pieces",
-  //     "\tPotion of Insect Control\t\t\t2 Gold Pieces",
-  //     "\tPotion of Anti-Poison\t\t\t\t2 Gold Pieces",
-  //     "\tHoly Water\t\t\t\t\t3 Gold Pieces",
-  //     "\tRing of Light\t\t\t\t\t3 Gold Pieces",
-  //     "\tBoots of Leaping\t\t\t\t2 Gold Pieces",
-  //     "\tRope of Climbing\t\t\t\t3 Gold Pieces",
-  //     "\tNet of Entanglement\t\t\t\t3 Gold Pieces",
-  //     "\tArmband of Strength\t\t\t\t3 Gold Pieces",
-  //     "\tGlove of Missile Dexterity\t\t\t2 Gold Pieces",
-  //     "\tRod of Water-finding\t\t\t\t2 Gold Pieces",
-  //     "\tGarlic Buds\t\t\t\t\t2 Gold Pieces",
-  //     "\tHeadband of Concentration\t\t\t3 Gold Pieces",
-  //     "\tFire Capsules\t\t\t\t\t3 Gold Pieces",
-  //     "\tNose Filters\t\t\t\t\t3 Gold Pieces"};
+
   std::vector<Item> items = {{"Potion of Healing", 3},
                              {"Potion of Plant Control", 2},
                              {"Potion of Stillness", 3},
@@ -1149,26 +1133,25 @@ void page_261(Player &player) {
                "Placing these on his nose, he picks up a piece of slate and "
                "chalk from a table next to his chair and begins to write "
                "frantically. He then hands you the slate.\n\n";
+
   do {
+
     std::cout << "\t     ITEM\t\t\t\t\t     COST" << std::endl;
     for (int i = 0; i < items.size(); i++) {
-      // std::cout << items[i];
       std::cout << i + 1 << ". " << items[i];
     }
+
     std::cout << "\n0. Exit" << std::endl;
     std::cout << "\nWhat items will you Purchase?" << std::endl;
     std::cout << "\nCurrent gold: " << player.gold << std::endl;
     pick = choice();
 
-    for (int i = 0; i < items.size(); i++) {
-      // std::cout << items[i];
+    for (int i = 0; i <= items.size(); i++) {
       if (pick == i) {
-        std::cout << "******************";
-        items.erase(items.begin());
-        std::cout << i + 1 << ". " << items[i];
+        items.erase(items.begin() + i - 1);
+        std::cout << "Erased";
       }
     }
-
   } while (pick != 0);
   std::cout << "\n\nHe tells you that all the instructions for use are written "
                "clearly on the labels attached to the items, together with "
