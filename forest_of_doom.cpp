@@ -1,4 +1,4 @@
-#include <algorithm>
+// #include <algorithm>
 #include <cstdlib>
 #include <iostream>
 #include <limits>
@@ -8,7 +8,9 @@
 
 struct Item {
   Item(const std::string &name, int price) : _name{name}, _price{price} {}
-
+  // Getter method for the name
+  const std::string &getName() const { return _name; }
+  const int &getPrice() const { return _price; }
   friend std::ostream &operator<<(std::ostream &out, Item &item) {
     out << item._name << "\t\t\t\t\t" << item._price << "\n";
     return out;
@@ -1148,8 +1150,17 @@ void page_261(Player &player) {
 
     for (int i = 0; i <= items.size(); i++) {
       if (pick == i) {
-        items.erase(items.begin() + i - 1);
-        std::cout << "Erased";
+        std::cout << pick << " ---- " << i;
+        if (player.gold >= items[i].getPrice()) {
+          std::cout << "\n*******\n"
+                    << items[i - 1].getName() << " Added to your Inventory for "
+                    << items[i - 1].getPrice() << " Gold.\n*******\n";
+          player.gold -= items[i - 1].getPrice();
+          items.erase(items.begin() + i - 1);
+        } else {
+          std::cout << "\n\nYou are out of Gold!\n";
+          break;
+        }
       }
     }
   } while (pick != 0);
