@@ -44,8 +44,11 @@ public:
   // 1 Potion of SKILL
   // 2 Potion of STRENGTH
   // 3 Potion of LUCK
-  int starterPotion = 0;
+  // int starterPotion = 0;
 
+  std::vector<Item> potions;
+  int provisions = 10;
+  std::vector<Item> equipment;
   Player() {
     srand(time(NULL));
 
@@ -59,6 +62,7 @@ public:
     gold = 30;
   }
 };
+void next();
 void intro(Player &player);
 void background();
 int choice();
@@ -484,6 +488,10 @@ void page_400(Player &player);
 //
 //   return choice;
 // }
+void next() {
+  std::cout << "\n\nPress any key to Continue...\n";
+  std::cin.get();
+}
 int choice() {
   int n;
   std::string temp;
@@ -502,7 +510,31 @@ int choice() {
 }
 
 void viewInventory(Player &player) {
-  std::cout << "\n***** INVENTORY *****\n";
+  std::cout << "\n***** INVENTORY *****";
+  std::cout << "\n--SKILL--\n";
+  std::cout << "\nInitial Skill=" << player.initSkill;
+  std::cout << "\nCurrent Skill=" << player.currSkill;
+  std::cout << "\n\n--STAMINA--\n";
+  std::cout << "\nInitial Stamina=" << player.initStamina;
+  std::cout << "\nCurrent Stamina=" << player.currStamina;
+  std::cout << "\n\n--LUCK--\n";
+  std::cout << "\nInitial Luck=" << player.initLuck;
+  std::cout << "\nCurrent Luck=" << player.currLuck;
+  std::cout << "\n\n***GOLD***\n" << player.gold;
+  // TODO Add jewel Handling
+  // std::cout << "\n\nJEWELS: " << player.jewels;
+  // TODO Add Handling for multiple potions. USE ITEM STRUCT OR MAKE SIMILAR
+  // POTION STRUCT
+  std::cout << "\n\n***POTIONS***\n";
+  for (int i = 0; i < player.potions.size(); i++) {
+    std::cout << player.potions[i].getName() << std::endl;
+  }
+  std::cout << "\n\n***PROVISIONS REMAINING***\n" << player.provisions;
+
+  std::cout << "\n\n***EQUIPMENT***" << std::endl;
+  for (int i = 0; i < player.equipment.size(); i++) {
+    std::cout << player.equipment[i].getName() << std::endl;
+  }
   // for (const auto &item : player.inventory) {
   //   std::cout
   //       << item
@@ -510,6 +542,7 @@ void viewInventory(Player &player) {
   // }
   std::cout << "\nPress Enter to return to the previous menu...\n";
   // std::cin.ignore();
+  //
   std::cin.get(); // Wait for the user to press enter
 }
 
@@ -560,8 +593,7 @@ void intro(Player &player) {
   std::cout << "\nRolling for initial STAMINA: " << player.initStamina;
   std::cout << "\nRolling for initial LUCK: " << player.initLuck;
   std::cout << "\n********************************";
-  std::cout << "\n\nPress any key to Continue...\n";
-  std::cin.get();
+  next();
 
   std::cout << "\n---BATTLES---";
   std::cout << "\nYou will often come across creatures in this game, where you "
@@ -588,8 +620,7 @@ void intro(Player &player) {
          "sequence continues until the STAMINA score of either you or the "
          "creature you are fighting has been reduced to zero (death).";
 
-  std::cout << "\n\nPress any key to Continue...\n";
-  std::cin.get();
+  next();
   std::cout << "\n\n---ESCAPING---\nSome situations you may be given the "
                "option of running away from a battle should things be going "
                "badly for you. However, if you do run away, the creature "
@@ -638,8 +669,7 @@ void intro(Player &player) {
          "taken a more serious blow. Subtract 1 extra STAMINA point.\nRemember "
          "that you must subtract 1 point from your onw LUCK score each time "
          "you Test your Luck.";
-  std::cout << "\n\nPress any key to Continue...\n";
-  std::cin.get();
+  next();
   std::cout
       << "\n\n---RESTORING SKILL, STAMINA, AND LUCK---\n\n-SKILL-\nYour SKILL "
          "score will not change much during ou adventure. Occasionally, a page "
@@ -672,8 +702,7 @@ void intro(Player &player) {
          "instructed to do so. Drinking the Potion of Fortune will restore "
          "your LUCK to its Initial level at any time, and increase your "
          "Initial LUCK by 1 point.";
-  std::cout << "\n\nPress any key to Continue...\n";
-  std::cin.get();
+  next();
   std::cout
       << "\n\n---EQUIPMENT AND POTIONS---\nYou will start your "
          "adventure with a bare minimum of equipment, but you may find "
@@ -693,26 +722,27 @@ void intro(Player &player) {
          "*****************\n";
   int starterPotion = 0;
   do {
-    std::cout << "\nPress 1, 2, or 3 to Choose starter Potion...";
-    std::cin >> starterPotion;
-    if (!std::cin) {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      fflush(stdin);
-      // std::cin.get();
-    }
+    std::cout << "\nPress 1, 2, or 3 to Choose starter Potion...\n";
+    starterPotion = choice();
+    // std::cin >> starterPotion;
+    // if (!std::cin) {
+    //   std::cin.clear();
+    //   std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    //   fflush(stdin);
+    //   // std::cin.get();
+    // }
     switch (starterPotion) {
     case 1:
-      std::cout << "Potion of SKILL added to inventory.\n";
-      player.starterPotion = 1;
+      std::cout << "\nPotion of SKILL added to inventory.\n";
+      player.potions.push_back({"Potion of SKILL", 5});
       break;
     case 2:
-      std::cout << "Potion of STAMINA added to inventory.\n";
-      player.starterPotion = 2;
+      std::cout << "\nPotion of STAMINA added to inventory.\n";
+      player.potions.push_back({"Potion of STAMINA", 5});
       break;
     case 3:
-      std::cout << "Potion of LUCK added to inventory.\n";
-      player.starterPotion = 3;
+      std::cout << "\nPotion of LUCK added to inventory.\n";
+      player.potions.push_back({"Potion of LUCK", 5});
       break;
     default:
       std::cout << "Invalid Input. Please press keys 1, 2, or 3 for a starter "
@@ -721,6 +751,7 @@ void intro(Player &player) {
   } while ((starterPotion != 1) && (starterPotion != 2) &&
            (starterPotion != 3));
 
+  next();
   std::cout << "\nThese potions may be taken at any time during your adventure "
                "(except when engaged in Battle). Taking a measure of potion "
                "will restore SKILL, STAMINA or LUCK scores to their Intial "
@@ -741,11 +772,13 @@ void intro(Player &player) {
                "minimum of risk and any player, no matter how weak on initial "
                "dice rolls, should be able to get through fairly easily.\nMay "
                "the luck of the gods go with you on the adventure ahead!";
+  next();
 }
 
 void background() {
   std::cout
-      << "\n\n\n---BACKGROUND---\nYou are an adventurer, a sword for hire, and "
+      << "\n\n\n---BACKGROUND---\nYou are an adventurer, a sword for hire, "
+         "and "
          "have been roaming the northern borderlands of your kingdom. Having "
          "always spurned the dullness of village life, you now wander the "
          "lands in search of wealth and danger. Despite the long walks and "
@@ -755,31 +788,45 @@ void background() {
          "trusty sword. Not once during the last ten days since entering the "
          "northern borderlands have you set eyes upon another person. This "
          "does not worry you at all, as you are happy with your own company "
-         "and enjoy the slow, sunny days hunting, eating and sleeping\n\nIt is "
+         "and enjoy the slow, sunny days hunting, eating and sleeping\n\nIt "
+         "is "
          "evening, and having feasted on a dinner of rabbit, spit-roasted on "
          "an open fire, you settle down to sleep beneath your sheepskin "
          "blanket. There's a full moon, and the light sparkles on the blade o"
-         "f your broadsword skewered into the ground by your side. You gaze at "
-         "it, wondering when you will next have to wipe the blood of some vile "
-         "creature from its sharp edge. These are strange lands, inhabited by "
-         "weird and loathsome beasts - goblins, trolls and even dragons.\n\nAs "
-         "the flame of your camp fire gently dies, you begin to drift asleep, "
+         "f your broadsword skewered into the ground by your side. You gaze "
+         "at "
+         "it, wondering when you will next have to wipe the blood of some "
+         "vile "
+         "creature from its sharp edge. These are strange lands, inhabited "
+         "by "
+         "weird and loathsome beasts - goblins, trolls and even "
+         "dragons.\n\nAs "
+         "the flame of your camp fire gently dies, you begin to drift "
+         "asleep, "
          "and images of screaming, green-faced trolls flicker through your "
-         "mind. Suddenly, in the bushes to your left, you hear the load crack "
+         "mind. Suddenly, in the bushes to your left, you hear the load "
+         "crack "
          "of a twig breaking under a clumsy foot, You leap up and grab your "
          "sword from the ground. You stand motionless but alert, ready to "
-         "pounce on your unseen adversary. Then you hear a groan, followed by "
-         "the dull thud of a body falling to the ground. Is it a trap? Slowly "
+         "pounce on your unseen adversary. Then you hear a groan, followed "
+         "by "
+         "the dull thud of a body falling to the ground. Is it a trap? "
+         "Slowly "
          "you walk over to the bush where the noise is coming from and "
-         "carefully pull back the branches. You look down to see a little old "
+         "carefully pull back the branches. You look down to see a little "
+         "old "
          "man with a great bushy beard, his face contorted with pain. You "
-         "crouch down to remove the iron helmet covering his balding head and "
-         "notice two crossbow bolts protruding from the stomach of his plump, "
-         "chainmail-clad torso. Picking him up, you carry him over to the fire "
+         "crouch down to remove the iron helmet covering his balding head "
+         "and "
+         "notice two crossbow bolts protruding from the stomach of his "
+         "plump, "
+         "chainmail-clad torso. Picking him up, you carry him over to the "
+         "fire "
          "and stir the dying embers into life. After covering him with the "
          "sheepskin blanket, you manage to get the old man to drink a little "
          "water. He coughs and moans. He sits up rigid, eyes staring fixedly "
-         "ahead, and starts to shout.\n\n\"I'll get them! I'll get them! Don't "
+         "ahead, and starts to shout.\n\n\"I'll get them! I'll get them! "
+         "Don't "
          "you fear, Gillibran, Bigleg is coming to bring you the hammer. Oh "
          "yes, indeed I am. Oh Yes...\"\n\nThe dwarf, whose name you presume "
          "to be Bigleg, is obviously delirious from the poison-tipped bolts "
@@ -789,60 +836,77 @@ void background() {
          "out! Ambush! Aagh! The hammer! Take the hammer to Gillibran! Save "
          "the dwarves!\"His eyes half close and the pain seems to ease a "
          "little, and as the delirium subsides, he speaks to you again in a "
-         "low whisper.\n\n\"Help us, friend... take the hammer to Gillibran... "
-         "opnly the hammer will unite our people against the trolls... We were "
+         "low whisper.\n\n\"Help us, friend... take the hammer to "
+         "Gillibran... "
+         "opnly the hammer will unite our people against the trolls... We "
+         "were "
          "on our way to Darkwood in search of the hammer... ambushed by the "
-         "little people... others killed... the map in my pouch will take you "
+         "little people... others killed... the map in my pouch will take "
+         "you "
          "to the home of Yaztromo, the master mage of these parts... he has  "
          "great magics for sale to protect you against the creatures of "
-         "Darkwood... take my gold... I beg you to find the hammer and take it "
+         "Darkwood... take my gold... I beg you to find the hammer and take "
+         "it "
          "to Gillibran, my Lord of Stonebridge... you will be well "
          "rewarded...\"\n\nBigleg opens his mouth to start another sentence, "
-         "but nothing comes out except his last dying breath. You sit down and "
+         "but nothing comes out except his last dying breath. You sit down "
+         "and "
          "ponder Bigleg's words. Who is Gillibran? Who is Yaztromo? What is "
-         "all the fuss about the dwarfish hammer? You reach over to th estill "
-         "ody of Bigleg and remove the pocuh from teh leather belt around his "
+         "all the fuss about the dwarfish hammer? You reach over to th "
+         "estill "
+         "ody of Bigleg and remove the pocuh from teh leather belt around "
+         "his "
          "waist. Inside you find 30 Gold Pieces and a map.";
   std::cout << "\n\n*****\n30 Gold "
                "Pieces "
                "and Yaztromo's Map Added to your Inventory\n*****\n\n";
-  // std::cout << "\n\nPress any key to Continue...\n";
-  std::cin.get();
+  next();
   std::cout
       << "Jingling the "
          "coins in "
-         "your hand you think of the possible reward which may await you just "
-         "for returning a hammer to a village of dwarfs. You decide to try to "
-         "find the hammer in Darkwood Forest it's been a few weeks since your "
-         "last good battle, and, what is more, you are liekly to be well paid "
+         "your hand you think of the possible reward which may await you "
+         "just "
+         "for returning a hammer to a village of dwarfs. You decide to try "
+         "to "
+         "find the hammer in Darkwood Forest it's been a few weeks since "
+         "your "
+         "last good battle, and, what is more, you are liekly to be well "
+         "paid "
          "for this one.\n\nWith your mind made up, you settle down to sleep, "
          "having taken back the sheepskin blanket  from poor Bigleg. In the "
          "morning you bury the old dwarf and gather up your possessions. You "
          "examine the map, look up to the sun, and find your bearings. "
-         "Whistling merrily, you head off south at a good pace, eager to meet "
+         "Whistling merrily, you head off south at a good pace, eager to "
+         "meet "
          "the man Yaztromo and see what he has to offer.";
-  std::cout << "\n\nPress any key to Continue...\n";
-  std::cin.get();
+  next();
 }
 
 void page_1(Player &player) {
   std::cout
-      << "\n\nYour walk to Yaztromo's takes a little over half a day, and you "
-         "arrive at his stone tower home dirty and hungry. As the tower is set "
+      << "\n\nYour walk to Yaztromo's takes a little over half a day, and "
+         "you "
+         "arrive at his stone tower home dirty and hungry. As the tower is "
+         "set "
          "back on the edges of Darkwood some fifty metrcs away from the path "
          "you have been following, it is difficult to find. Finally you walk "
          "up to the huge oak door, somewhat relieved to find that it does "
-         "exist and that Bigleg had not been speaking wildly in his delirium. "
-         "A large brass bell and gong hang from the stone archway. As you ring "
+         "exist and that Bigleg had not been speaking wildly in his "
+         "delirium. "
+         "A large brass bell and gong hang from the stone archway. As you "
+         "ring "
          "the bell, a shiver runs clown your spine and you realize that the "
          "loud 'bong' invades a deep silence, which you had not noticed "
          "before. There are no sounds of birds or animals to be heard. You "
-         "wait anxiously at the door and hear slow footsteps descending stairs "
+         "wait anxiously at the door and hear slow footsteps descending "
+         "stairs "
          "from the tower above. A small wooden slot in the door slides open, "
-         "and two eyes appear and examine you.\n\"Well, who are you?\" demands "
+         "and two eyes appear and examine you.\n\"Well, who are you?\" "
+         "demands "
          "a grumpy voice through the hole.\n\nYou answer that you are an "
          "adventurer in search of the master mage Yaztromo, intending to "
-         "purchase nagical items ftom him to combat the creatures of Darkwood "
+         "purchase nagical items ftom him to combat the creatures of "
+         "Darkwood "
          "Forest. \n\n\"Oh! Well in that case, if you are interested in "
          "buying "
          "some of my merchandise, you had better come up. I am Yaztromo.\"";
@@ -911,7 +975,22 @@ void page_50(Player &player) {}
 void page_51(Player &player) {}
 void page_52(Player &player) {}
 void page_53(Player &player) {}
-void page_54(Player &player) {}
+void page_54(Player &player) {
+  std::cout << "\n\nAs you draw your sword, Yaztromo turns round and casually "
+               "advises you not to be foolish as his magic is great.\n\nDo you "
+               "still wish to attack him?";
+  std::cout << "\n1. Attack Yaztromo\n2. Continue following him.\n";
+
+  int pick = choice();
+  switch (pick) {
+  case 1:
+    page_399(player);
+    break;
+  case 2:
+    page_261(player);
+    break;
+  }
+}
 void page_55(Player &player) {}
 void page_56(Player &player) {}
 void page_57(Player &player) {}
@@ -1041,7 +1120,8 @@ void page_177(Player &player) {
         << "\n\nOutside in the bright light you notice the dead quietness "
            "again. "
            "A narrow path leads northwards from the tall grass surrounding "
-           "Yaztromo's tower into the dense undergrowth of Darkwood Forest. In "
+           "Yaztromo's tower into the dense undergrowth of Darkwood Forest. "
+           "In "
            "a "
            "few strides you are surrounded by the dark and tangled forest; "
            "stones and knotted roots seem to hide in the shadows and you can "
@@ -1189,19 +1269,19 @@ void page_261(Player &player) {
                "frantically. He then hands you the slate.\n\n";
 
   do {
-    // bool canAffordItem = false;
-    //
-    // for (int i = 0; i < items.size(); i++) {
-    //   if (player.gold >= items[i].getPrice()) {
-    //     canAffordItem = true;
-    //     break;
-    //   }
-    // }
-    //
-    // if (!canAffordItem) {
-    //   std::cout << "\n\nYou don't have enough gold for any more items!\n\n";
-    //   break;
-    // }
+    bool canAffordItem = false;
+
+    for (int i = 0; i < items.size(); i++) {
+      if (player.gold >= items[i].getPrice()) {
+        canAffordItem = true;
+        break;
+      }
+    }
+
+    if (!canAffordItem) {
+      std::cout << "\n\nYou don't have enough gold for any more items!\n\n";
+      break;
+    }
 
     std::cout << "\t     ITEM\t\t\t\t\t     COST" << std::endl;
     for (int i = 0; i < items.size(); i++) {
@@ -1224,6 +1304,7 @@ void page_261(Player &player) {
                     << items[i - 1].getName() << " Added to your Inventory for "
                     << items[i - 1].getPrice() << " Gold.\n*******\n";
           player.gold -= items[i - 1].getPrice();
+          player.equipment.push_back(items[i - 1]);
           items.erase(items.begin() + i - 1);
         } else {
           std::cout << "\n\nYou are out of Gold!\n\n";
@@ -1239,29 +1320,39 @@ void page_261(Player &player) {
                "the magic in the items only works once, but they are the best "
                "you can buy for the money.";
   std::cout
-      << "\n\nIf you decide to buy any of the items, pay for them by reducing "
-         "the amount of Gold on your Inventory Sheet and add the items to the "
+      << "\n\nIf you decide to buy any of the items, pay for them by "
+         "reducing "
+         "the amount of Gold on your Inventory Sheet and add the items to "
+         "the "
          "relevant sections on it. Yaztromo then asks you the reason for the "
-         "purchase of the items, and you tell him your story and your decision "
+         "purchase of the items, and you tell him your story and your "
+         "decision "
          "to continue the quest of the luckless Bigleg. \"Ah yes\" Yaztromo "
          "say slowly, rubbing his chin, \"I heard that the good dwarfs of "
-         "Stonebridge had lost their fabled war-hammer. Without it, their king "
+         "Stonebridge had lost their fabled war-hammer. Without it, their "
+         "king "
          "is unable to arouse his people, despite the fact that the hill "
-         "trolls threaten their village. Rumour has it that an envious king of "
-         "another village of dwarfs sent and eagle to Stonebridge to steal the "
+         "trolls threaten their village. Rumour has it that an envious king "
+         "of "
+         "another village of dwarfs sent and eagle to Stonebridge to steal "
+         "the "
          "hammer, which it managed to do. But as it flew back over Darkwood, "
          "it was attacked by death hawks and the hammer dropped into the "
          "forest and was lost. Appearently, two forest goblins found the "
          "hammer but could not decide who was to keep it. They wrestled fo "
          "hours but gave up. Then they discovered that the handle unscrewed "
-         "from the head, and the arguement was settled. One kept the head, the "
+         "from the head, and the arguement was settled. One kept the head, "
+         "the "
          "other kept the handle. Then they parted, each happy with his new "
          "treasure. Who knows if they still have them. So I'm afraid your "
-         "problems are doubled. I can tell you that the head is made of bronze "
-         "and the handle is made of polished ebony. Both head and handle have "
+         "problems are doubled. I can tell you that the head is made of "
+         "bronze "
+         "and the handle is made of polished ebony. Both head and handle "
+         "have "
          "the letter G inscrubed on them. Your task is not easy. Good "
          "luck.\"\n\nYou thank Yaztromo and leave the room by the spiral "
          "staircase.";
+
   page_177(player);
 }
 void page_262(Player &player) {}
