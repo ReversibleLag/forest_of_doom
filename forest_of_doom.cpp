@@ -1492,7 +1492,20 @@ void page_395(Player &player) {}
 void page_396(Player &player) {}
 void page_397(Player &player) {}
 void page_398(Player &player) {}
-void page_399(Player &player) {}
+void page_399(Player &player) {
+  std::cout
+      << "\n\nYou charge at Yaztromo but only reach the first stair when he "
+         "lifts his right arm and nonchalantly mumbles a few words. Time seems "
+         "to stand still amid bright flashes, and your body feels like a "
+         "bubbling liquid inside. When the turmoil subsides, you know "
+         "something terrible happened. The stone stair feels cold on your body "
+         "and you realize the problems of a life as a frog! Yaztromo bends "
+         "down and picks you up, saying with a booming voice:\n\n\"Well, "
+         "foolish warrior, enjoy your new life!\"With that, he lets out a "
+         "deafening laugh and nearly drop you. Then she shuffles to the oak "
+         "door and, opening it, throws you into the tall grasses "
+         "outside.\n\nYour adventure ends here.";
+}
 void page_400(Player &player) {}
 int main() {
 
