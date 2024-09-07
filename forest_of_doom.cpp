@@ -1098,9 +1098,9 @@ void page_1(Player &player) {
     int pick = choice();
     switch (pick) {
     case 1:
-      // page_261(player);
+      page_261(player);
       // page_7(player);
-      page_177(player);
+      // page_177(player);
       break;
     case 2:
       page_54(player);
@@ -1264,9 +1264,51 @@ void page_9(Player &player) {
   next();
   page_176(player);
 }
-void page_10(Player &player) {}
-void page_11(Player &player) {}
-void page_12(Player &player) {}
+void page_10(Player &player) {
+  std::cout << "\n\nYou pick up a good-sized rock off the floor and take aim. "
+               "You throw the rock with all your might at the Ogre but are "
+               "dismayed to see it fly past his head and crash against the far "
+               "wall of the cave. You curse, but decide nevertheless to rush "
+               "into the cave to attack the Ogre.\n";
+  next();
+  page_290(player);
+}
+void page_11(Player &player) {
+
+  std::cout << "\n\nYou start to lose your balance as the illusion distorts "
+               "your mind. You close your eyes and hold your head in your "
+               "hands but it makes no difference. You reel around the room and "
+               "then fall to the floor unconscious.\n";
+  next();
+  page_353(player);
+}
+void page_12(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout << "\n\nYou tell the Gnome that perhaps you had been a little "
+                 "hasty in drawing  your sword, but you had to be prepared for "
+                 "anything within the evil boundary of Darkwood Forest. He "
+                 "replies that that is no excuse for drawing your weapon on a "
+                 "defenceless old mane and, if you want your sword back, it "
+                 "will cost you 10 Gold Pieces or two items of treasure from "
+                 "your backpack.\n1. To hand over the 10 Gold\n2.";
+    pick = choice();
+    switch (pick) {
+    case 1:
+      // TODO Give 10 piece of gold
+      return; // Exit the loop and function after making a choice
+    case 2:
+      // TODO give 2 pieces of teasure
+      return; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
 void page_13(Player &player) {}
 void page_14(Player &player) {}
 void page_15(Player &player) {}
