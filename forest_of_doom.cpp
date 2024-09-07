@@ -62,7 +62,19 @@ public:
     gold = 30;
   }
 };
+
+class Enemy {
+public:
+  std::string name = "";
+  int skill, stamina = 0;
+  Enemy(std::string name, int skill, int stamina) {
+    this->name = name;
+    this->skill = skill;
+    this->stamina = stamina;
+  }
+};
 void next();
+void battle();
 void intro(Player &player);
 void background();
 int choice();
@@ -509,6 +521,139 @@ int choice() {
   return n;
 }
 
+void battle(Player &player, Enemy &enemy) {
+  // The squence of combat is:
+  // 1. Roll both dice once for the creature. Add its SKILL score. This total is
+  // the creatures  Attack Strength.
+  // 2. Roll both dice once for yourself. Add the  number rolled to your current
+  // SKILL score. This total is your  Attack Strength.
+  // 3. If your Attack Strength is higher than that of  the creature, you have
+  // wounded it. Proceed to step 4. If the  creature's Attack Strength total are
+  // the same, you have avoided each  other's blows - start the next Attack
+  // Round from step 1  above. 4.You have wounded the creature, so subtract 2
+  // points from  its STAMINA score. You may use your LUCK here to  do
+  // additional  damage! (Button option when available)
+  // 5. The creature has wounded  you, so subtract 2 points from your own
+  // STAMINA score. Again you may  use LUCK at this stage.
+  // 6. Make the appropriate adjustments to  either the creature's or your own
+  // STAMINA scores (and your LUCK  score if you used LUCK).
+  // 7. Begin the next Attack Round by  returning to your current SKILL score
+  // and repeating steps 1-6. This  sequence continues until the STAMINA score
+  // of either you or the  creature you are fighting has been reduced to zero
+  // (death).;
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  bool battling = true;
+
+  while (battling) {
+    if (player.currStamina <= 0) {
+      std::cout
+          << "\n\nYou have perished in combat and your adventure ends here.";
+      battling = false;
+      break;
+    } else if (enemy.stamina <= 0) {
+      std::cout << "\n\n" << enemy.name << "has been defeated!";
+      battling = false;
+      break;
+    }
+    int enemySkill = (rand() % 6 + 1) + (rand() % 6 + 1);
+    int playerRoll = (rand() % 6 + 1) + (rand() % 6 + 1);
+    int enemyAttackScore = enemySkill + enemy.skill;
+    int playerAttackScore = player.currSkill + playerRoll;
+    std::cout << "***Battle Phase*****";
+    std::cout << "\n\nEnemies Skill: " << enemySkill;
+    std::cout << "\nEnemies Attack Score: " << enemyAttackScore;
+    std::cout << "\nRolling for Yourself: " << playerRoll;
+    std::cout << "\nPlayer Attack Score: " << playerAttackScore;
+    std::cout << "\n\nPlayer Stamina: " << player.currStamina;
+    std::cout << "\n\nEnemy Stamina: " << enemy.stamina;
+
+    if (playerAttackScore > enemyAttackScore) {
+      std::cout << "\n\n You have wounded the " << enemy.name
+                << " for 2 STAMINA.";
+
+      std::cout
+          << "\n\nWould you like to test your LUCK to do additional damage "
+             "to the "
+          << enemy.name
+          << "?\n1. Roll for additional Damage\n2. Continue Battle\n";
+      do {
+        pick = choice();
+        switch (pick) {
+        case 1:
+          playerRoll = (rand() % 6 + 1) + (rand() % 6 + 1);
+          if (playerRoll <= player.currLuck) {
+            // LUCKY
+            std::cout << "\n\nYou successfully did 2 additional damage!";
+            enemy.stamina -= 4;
+            player.currLuck -= 1;
+            break;
+          } else {
+            // UNLUCKY
+
+            std::cout << "\n\nYou failed your LUCK roll and grazed the "
+                      << enemy.name << " for 1 STAMINA";
+            enemy.stamina -= 1;
+            player.currLuck -= 1;
+            break;
+          }
+        case 2:
+          std::cout << "\n\nContinuing the Battle!";
+          enemy.stamina -= 2;
+          break; // Exit the loop and function after making a choice
+        default:
+          std::cout << "\nInvalid choice. Please try again.\n";
+          break;
+        }
+
+      } while (pick != 1 && pick != 2);
+    } else if (enemyAttackScore > playerAttackScore) {
+      std::cout << "\n\nThe " << enemy.name
+                << " has wounded you for 2 STAMINA points.";
+
+      std::cout << "\n\nWould you like to test your LUCK to do attempt to "
+                   "evade damage?"
+
+                << "\n1. Roll to Attempt Evade\n2. Continue Battle\n";
+      do {
+        pick = choice();
+        switch (pick) {
+        case 1:
+          playerRoll = (rand() % 6 + 1) + (rand() % 6 + 1);
+          if (playerRoll <= player.currLuck) {
+            // LUCKY
+            std::cout << "\n\nYou successfully dodged the attack and only took "
+                         "1 Damage";
+            player.currStamina -= 1;
+            player.currLuck -= 1;
+            break;
+          } else {
+            // UNLUCKY
+            std::cout
+                << "\n\nYou failed to dodge the attack, and took 3 damage!";
+            player.currStamina -= 3;
+            player.currLuck -= 1;
+            break;
+          }
+        case 2:
+          std::cout << "\n\nContinuing the Battle!";
+          player.currStamina -= 2;
+          break; // Exit the loop and function after making a choice
+                 //
+                 //
+        default:
+          std::cout << "\nInvalid choice. Please try again.\n";
+          break;
+        }
+
+      } while (pick != 1 && pick != 2);
+
+    } else {
+      std::cout << "\n\nBoth you and the " << enemy.name
+                << " failed to hit eachother.";
+    }
+  }
+}
+
 void viewInventory(Player &player) {
   std::cout << "\n***** INVENTORY *****";
   std::cout << "\n--SKILL--\n";
@@ -538,7 +683,8 @@ void viewInventory(Player &player) {
   // for (const auto &item : player.inventory) {
   //   std::cout
   //       << item
-  //       << std::endl; // Assuming player.inventory is a list of strings/items
+  //       << std::endl; // Assuming player.inventory is a list of
+  //       strings/items
   // }
   std::cout << "\nPress Enter to return to the previous menu...\n";
   // std::cin.ignore();
@@ -554,27 +700,36 @@ void intro(Player &player) {
   std::cout
       << "\n\n---PREFACE---\nOnly the foolhardy or the very brave would "
          "willingly risk a journey into Darkwood Forest, where strange, "
-         "twisting paths wind their way into the eeire depths. Who knows what "
-         "monstrous creatures lurk in the threatening shadows, or what deadly "
-         "adventures await the unwary traveller? Do YOU dare to enter?\n\nIn a "
-         "desperate race against time, deep within Darkwood, your quest is to "
+         "twisting paths wind their way into the eeire depths. Who knows "
+         "what "
+         "monstrous creatures lurk in the threatening shadows, or what "
+         "deadly "
+         "adventures await the unwary traveller? Do YOU dare to enter?\n\nIn "
+         "a "
+         "desperate race against time, deep within Darkwood, your quest is "
+         "to "
          "find the missing pieces of the legendary Hammer of Stonebridge, "
          "which was fashioned by Dwarfs to protect peaceful Stonebrdige "
          "against its ancient doom.\n\nTwo dice, a pencil and an eraser are "
          "all you need to embark on this thrilling adventure of sword and "
-         "sorcery, complete with its elaborate combat system and a score sheet "
+         "sorcery, complete with its elaborate combat system and a score "
+         "sheet "
          "to record your gains and losses.\n\nMany dangers be ahead and your "
          "success is by no means certain. Powerful adversaries are ranged "
          "against you and often your only chice is to kill or be killed!";
 
   std::cout
       << "\n\n---HOW TO PLAY---\nBefore embarking on your adventure, you "
-         "must first determine your own strengths and weaknesses. You have in "
+         "must first determine your own strengths and weaknesses. You have "
+         "in "
          "your possession a sword "
-         "and a backpack containing provisions (food and drink) for the trip. "
+         "and a backpack containing provisions (food and drink) for the "
+         "trip. "
          "You have been preparing for your quest by training yourself in "
-         "swordplay and exercising vigorously to build up your stamina.\n\nTo "
-         "see how effective your preparations have been, you must use the dice "
+         "swordplay and exercising vigorously to build up your "
+         "stamina.\n\nTo "
+         "see how effective your preparations have been, you must use the "
+         "dice "
          "to determine your initial SKILL and STAMINA scores. \n\nThere will "
          "be an option to review your STATS on every menu.";
 
@@ -584,7 +739,8 @@ void intro(Player &player) {
   std::cout
       << "\nSKILL score reflects your swordsmanship and general fighting "
          "expertis; higher is better!\n\nSTAMINA score reflects your general "
-         "constitution, your will to survive, your determiniation and overall "
+         "constitution, your will to survive, your determiniation and "
+         "overall "
          "fitness; higher score will longer your survival.\n\nLUCK score "
          "indicates how naturally luck you are as a person!\n\n";
 
@@ -605,18 +761,23 @@ void intro(Player &player) {
          "creature. Add its SKILL score. This total is the creatures "
          "Attack Strength.\n2. Roll both dice once for yourself. Add the "
          "number rolled to your current SKILL score. This total is your "
-         "Attack Strength.\n3. If your Attack Strength is higher than that of "
+         "Attack Strength.\n3. If your Attack Strength is higher than that "
+         "of "
          "the creature, you have wounded it. Proceed to step 4. If the "
-         "creature's Attack Strength total are the same, you have avoided each "
+         "creature's Attack Strength total are the same, you have avoided "
+         "each "
          "other's blows - start the next Attack Round from step 1 "
          "above.\n4.You have wounded the creature, so subtract 2 points from "
          "its STAMINA score. You may use your LUCK here to  do additional "
-         "damage! (Button option when available)\n5. The creature has wounded "
-         "you, so subtract 2 points from your own STAMINA score. Again you may "
+         "damage! (Button option when available)\n5. The creature has "
+         "wounded "
+         "you, so subtract 2 points from your own STAMINA score. Again you "
+         "may "
          "use LUCK at this stage.\n6. Make the appropriate adjustments to "
          "either the creature's or your own STAMINA scores (and your LUCK "
          "score if you used LUCK).\n7. Begin the next Attack Round by "
-         "returning to your current SKILL score and repeating steps 1-6. This "
+         "returning to your current SKILL score and repeating steps 1-6. "
+         "This "
          "sequence continues until the STAMINA score of either you or the "
          "creature you are fighting has been reduced to zero (death).";
 
@@ -635,14 +796,16 @@ void intro(Player &player) {
                "somtimes you will fight each one in turn.";
   std::cout
       << "\n\n---LUCK---\nAt various times during your adventure, either in "
-         "battles or when you come across situations in which you could either "
+         "battles or when you come across situations in which you could "
+         "either "
          "be lucky or unlucky (details of these are given on the pages "
          "themselves), you may call on your luck to make the outcome more "
          "favourable. But beware! Using luck is a risky business and if you "
          "are unlucky, the results could be disastrous.\n\nThe procedure for "
          "using your luck is as follows: roll two dice. If the number rolled "
          "is equal to or less than your current LUCK score, you have been "
-         "lucky and the result will go in your favour. If th enumber rolled is "
+         "lucky and the result will go in your favour. If th enumber rolled "
+         "is "
          "higher than your current LOCK score, you have been unlucky and you "
          "will be penalized.\n\nRoll <= Your LUCK Score(LUCKY)\nRoll > Your "
          "LUCK Score(UNLUCKY)\nThis procedure is known as Testing your Luck. "
@@ -651,46 +814,60 @@ void intro(Player &player) {
          "rely on your luck, the more risky this will become.";
   std::cout
       << "\n\n---USING LUCK IN BATTLES---\nOn certain pages of the book you "
-         "will be told to Test your Luck and will be told the consequences of "
+         "will be told to Test your Luck and will be told the consequences "
+         "of "
          "your being lucky or unlucky. However, in battles, you always have "
-         "the option of using your luck either to inflict a more serious wound "
-         "on a creature you have just wounded, or to minimize the effects of a "
+         "the option of using your luck either to inflict a more serious "
+         "wound "
+         "on a creature you have just wounded, or to minimize the effects of "
+         "a "
          "wound the creature has just inflicted on you.\nIf you have just "
-         "wounded the creature, you may Test your Luck as described above. If "
-         "you are lucky, you have inflicted a severe wound and may subtract an "
+         "wounded the creature, you may Test your Luck as described above. "
+         "If "
+         "you are lucky, you have inflicted a severe wound and may subtract "
+         "an "
          "extra 2 points from the creature's STAMINA score. However, if you "
-         "are unlucky, the wound was a mere graze and you must restore 1 point "
+         "are unlucky, the wound was a mere graze and you must restore 1 "
+         "point "
          "to the creature's STAMINA (i.e. instead of scoring the normal 2 "
-         "points of damage, you have now scored only 1).\n If the creature has "
+         "points of damage, you have now scored only 1).\n If the creature "
+         "has "
          "just wounded you, you may Test your Luck to try to minimize the "
          "wound. If you are lucky, you have managed to avoid the full damage "
          "of the blow. Restore 1 point to STAMINA (i.e. instead of doing 2 "
          "points of damage it has done only 1). If you are unlucky, you have "
-         "taken a more serious blow. Subtract 1 extra STAMINA point.\nRemember "
+         "taken a more serious blow. Subtract 1 extra STAMINA "
+         "point.\nRemember "
          "that you must subtract 1 point from your onw LUCK score each time "
          "you Test your Luck.";
   next();
   std::cout
-      << "\n\n---RESTORING SKILL, STAMINA, AND LUCK---\n\n-SKILL-\nYour SKILL "
-         "score will not change much during ou adventure. Occasionally, a page "
+      << "\n\n---RESTORING SKILL, STAMINA, AND LUCK---\n\n-SKILL-\nYour "
+         "SKILL "
+         "score will not change much during ou adventure. Occasionally, a "
+         "page "
          "may give instructions to increase or decrease your SKILL score. A "
          "Magic Weapon may increase your SKILL, but remember that only one "
          "weapon can be used at a time! You cannot claim 2 SKILL bonuses for "
          "carrying two Magic Swords. Your SKILL score can never exceed its "
-         "Initial value unless specifically instructed. Drinking the Potion of "
+         "Initial value unless specifically instructed. Drinking the Potion "
+         "of "
          "Skill will restore your SKILL to its Inital level at "
-         "anytime.\n\n-STAMINA AND PROVISIONS-\nYour STAMINA score will change "
+         "anytime.\n\n-STAMINA AND PROVISIONS-\nYour STAMINA score will "
+         "change "
          "a "
          "lot during your adventure as you fight monsters and undertake "
          "arduous tasks. As you near your goal. your STAMINA level maybe "
          "dangerously low and battles maybe particularly risky, so be "
          "careful!\nYour backpack contains enough provisions for ten meals. "
          "You may rest and eat at any time except when engaged in a Battle. "
-         "Eating a meal restores 4 STAMINA points. When you eat a meal, add 4 "
+         "Eating a meal restores 4 STAMINA points. When you eat a meal, add "
+         "4 "
          "points to your STAMINA score and deduct 1 point from your "
          "Provisions. A separate Provisions Remaining box is provided on the "
          "Adventure Sheet for recording details of Provisions. Remember that "
-         "you have a long way to go, so use your Provisions wisely!\nRemember "
+         "you have a long way to go, so use your Provisions "
+         "wisely!\nRemember "
          "also that your STAMINA score may never exceed its Inital value "
          "unless specifically instructed on a page. Drinking the Potion of "
          "Strength will restore your STAMINA to its Inital level at any "
@@ -709,16 +886,20 @@ void intro(Player &player) {
          "or buy other items during your travels, You are armed with a "
          "sword and are dressed in leather armour. You have a backpack "
          "to hold your Provisions and any treasures you may come across.\nIn "
-         "addition, you may take one bottle of a magical potion which will aid "
-         "you on your quest. You may choose to take only one bottle of any of "
+         "addition, you may take one bottle of a magical potion which will "
+         "aid "
+         "you on your quest. You may choose to take only one bottle of any "
+         "of "
          "the "
-         "following:\n*********************************************************"
+         "following:\n*******************************************************"
+         "**"
          "***********************\n\t1. A Potion "
          "of Skill - restores "
          "SKILL points.\n\t2. A Potion "
          "of Strength - restores STAMINA points\n\t3. A Potion of Fortune - "
          "restores LUCK points and adds 1 to Initial "
-         "LUCK\n***************************************************************"
+         "LUCK\n*************************************************************"
+         "**"
          "*****************\n";
   int starterPotion = 0;
   do {
@@ -883,54 +1064,206 @@ void background() {
 }
 
 void page_1(Player &player) {
-  std::cout
-      << "\n\nYour walk to Yaztromo's takes a little over half a day, and "
-         "you "
-         "arrive at his stone tower home dirty and hungry. As the tower is "
-         "set "
-         "back on the edges of Darkwood some fifty metrcs away from the path "
-         "you have been following, it is difficult to find. Finally you walk "
-         "up to the huge oak door, somewhat relieved to find that it does "
-         "exist and that Bigleg had not been speaking wildly in his "
-         "delirium. "
-         "A large brass bell and gong hang from the stone archway. As you "
-         "ring "
-         "the bell, a shiver runs clown your spine and you realize that the "
-         "loud 'bong' invades a deep silence, which you had not noticed "
-         "before. There are no sounds of birds or animals to be heard. You "
-         "wait anxiously at the door and hear slow footsteps descending "
-         "stairs "
-         "from the tower above. A small wooden slot in the door slides open, "
-         "and two eyes appear and examine you.\n\"Well, who are you?\" "
-         "demands "
-         "a grumpy voice through the hole.\n\nYou answer that you are an "
-         "adventurer in search of the master mage Yaztromo, intending to "
-         "purchase nagical items ftom him to combat the creatures of "
-         "Darkwood "
-         "Forest. \n\n\"Oh! Well in that case, if you are interested in "
-         "buying "
-         "some of my merchandise, you had better come up. I am Yaztromo.\"";
-  std::cout << "\n\nWill you:\n\n1. Follow him up the stairs?\n2. Draw your "
-               "sword and attack him?\n";
-  int pick = choice();
-  switch (pick) {
-  case 1:
-    page_261(player);
-    break;
-  case 2:
-    page_54(player);
-    break;
-  }
+  int pick = 0;
+  do {
+    std::cout
+        << "\n\nYour walk to Yaztromo's takes a little over half a day, and "
+           "you "
+           "arrive at his stone tower home dirty and hungry. As the tower is "
+           "set "
+           "back on the edges of Darkwood some fifty metrcs away from the path "
+           "you have been following, it is difficult to find. Finally you walk "
+           "up to the huge oak door, somewhat relieved to find that it does "
+           "exist and that Bigleg had not been speaking wildly in his "
+           "delirium. "
+           "A large brass bell and gong hang from the stone archway. As you "
+           "ring "
+           "the bell, a shiver runs clown your spine and you realize that the "
+           "loud 'bong' invades a deep silence, which you had not noticed "
+           "before. There are no sounds of birds or animals to be heard. You "
+           "wait anxiously at the door and hear slow footsteps descending "
+           "stairs "
+           "from the tower above. A small wooden slot in the door slides open, "
+           "and two eyes appear and examine you.\n\"Well, who are you?\" "
+           "demands "
+           "a grumpy voice through the hole.\n\nYou answer that you are an "
+           "adventurer in search of the master mage Yaztromo, intending to "
+           "purchase nagical items ftom him to combat the creatures of "
+           "Darkwood "
+           "Forest. \n\n\"Oh! Well in that case, if you are interested in "
+           "buying "
+           "some of my merchandise, you had better come up. I am Yaztromo.\"";
+    std::cout << "\n\nWill you:\n\n1. Follow him up the stairs?\n2. Draw your "
+                 "sword and attack him?\n";
+    int pick = choice();
+    switch (pick) {
+    case 1:
+      // page_261(player);
+      // page_7(player);
+      page_177(player);
+      break;
+    case 2:
+      page_54(player);
+      break;
+    }
+  } while (pick != 1 && pick != 2);
 }
 
-void page_2(Player &player) {}
-void page_3(Player &player) {}
-void page_4(Player &player) {}
-void page_5(Player &player) {}
-void page_6(Player &player) {}
-void page_7(Player &player) {}
-void page_8(Player &player) {}
-void page_9(Player &player) {}
+void page_2(Player &player) {
+  std::cout << "\n\nYour adventure ends here as your tasty fresh flesh is "
+               "about to become a savoury feast for the victorious Ghoul.";
+}
+void page_3(Player &player) {
+  std::cout << "\n\nYou follow five more arrows to the trunk of an old dead "
+               "tree still rooted in the ground. You see that the trunk is "
+               "hollow and that the hole continues through the trunk into the "
+               "ground to make a tunnel. It is dark down the hole and you "
+               "cannot see how far it is to the bottom.";
+
+  for (int i = 0; i <= player.equipment.size(); i++) {
+    if (player.equipment[i].getName() == "Ring of Light") {
+      std::cout << "\n1. Use Ring of Light?\n2. Return to the Path.\n";
+      int pick = choice();
+      switch (pick) {
+      case 1:
+        player.equipment.erase(player.equipment.begin() + i - 1);
+        std::cout << "\n\nRing of Light consumed.";
+        page_322(player);
+        break;
+      case 2:
+        page_120(player);
+        break;
+      }
+
+    } else {
+      std::cout << "\n\nYou do not Possess a Ring of Light and must return to "
+                   "the path.";
+      next();
+      break;
+    }
+  }
+}
+void page_4(Player &player) {
+  std::cout << "\n\nLose 4 STAMINA points.\n";
+  player.currStamina -= 4;
+  if (player.currStamina <= 0) {
+    std::cout
+        << "\n\nYou have died from blood loss, and your adventure ends here.";
+  } else {
+    int pick = 0; // Declare pick outside the loop to persist between iterations
+    do {
+      std::cout
+          << "\n\nYou manage to pull the arrow from your shoulder although "
+             "the pain is agonizing.\n1. If you still wish to enter the "
+             "cave.\n2. If you wish you crawl back to the junction.\n";
+      pick = choice();
+      switch (pick) {
+      case 1:
+        page_49(player);
+        return; // Exit the loop and function after making a choice
+      case 2:
+        page_93(player);
+        return; // Exit the loop and function after making a choice
+      case 3:
+        viewInventory(player);
+        break; // Go back to the loop to allow for another choice
+      default:
+        std::cout << "\nInvalid choice. Please try again.\n";
+        break;
+      }
+    } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+  }
+}
+void page_5(Player &player) {
+
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout << "\n\nSitting in the ornate throne you feel strangely "
+                 "uncomfortable. The two Clone Warriors grovel on the floor in "
+                 "front of you in complete subservience. Do they expect you to "
+                 "become their new master?\n1. If you wish the crown on your "
+                 "head.\n2. If you wish to leave the alcove and climb up the "
+                 "rest of the steps to the roof of the cavern.\n";
+    pick = choice();
+    switch (pick) {
+    case 1:
+      page_333(player);
+      return; // Exit the loop and function after making a choice
+    case 2:
+      page_249(player);
+      return; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
+void page_6(Player &player) {
+  std::cout
+      << "\n\nAs you walk past the Goblin he growls unlike anything you have "
+         "ever heard before, a growl that you would not expect a Goblin to "
+         "make. Felling a little nervous you head quickly north.\n";
+  next();
+  page_148(player);
+}
+void page_7(Player &player) {
+  std::cout
+      << "\n\nYou draw your sword and prepare to meet the yellow- and "
+         "black-striped attackers. They are KILLER BEES and will attack in "
+         "separate droves, each drove counting as a single creature.\n";
+
+  std::cout << "\n\nFirst KILLER BEE --- 7 SKILL --- 3 STAMINA\n";
+  Enemy bee1("KILLER BEE", 7, 3);
+  battle(player, bee1);
+  std::cout << "\n\nSecond KILLER BEE --- 8 SKILL --- 4 STAMINA\n";
+  Enemy bee2("KILLER BEE", 8, 4);
+  battle(player, bee2);
+  std::cout << "\n\nThird KILLER BEE --- 7 SKILL --- 4 STAMINA\n";
+  Enemy bee3("KILLER BEE", 7, 4);
+  battle(player, bee3);
+  next();
+  page_23(player);
+}
+void page_8(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout
+        << "\n\nWalking along the path, you hear footsteps and arguing voices "
+           "ahead of you.\n1. If you wish to meet the owners voices.\n2. If "
+           "you "
+           "would rather hide in the bushes and let them walk by.\n3. View "
+           "Inventory\n";
+    pick = choice();
+    switch (pick) {
+    case 1:
+      page_317(player);
+      return; // Exit the loop and function after making a choice
+    case 2:
+      page_392(player);
+      return; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
+void page_9(Player &player) {
+  std::cout << "\n\nYou unlock the door and step back, drawing your sword in "
+               "case the Golbin tries to attack you. He picks up a wooden "
+               "stool and, waving it in the air, kicks the door open and "
+               "charges at you screaming.\nYou must fight\n";
+  std::cout << "\n\nGOBLIN --- 5 SKILL --- 4 STAMINA\n";
+  Enemy goblin("GOBLIN", 5, 4);
+  battle(player, goblin);
+  next();
+  page_176(player);
+}
 void page_10(Player &player) {}
 void page_11(Player &player) {}
 void page_12(Player &player) {}
@@ -948,16 +1281,75 @@ void page_23(Player &player) {}
 void page_24(Player &player) {}
 void page_25(Player &player) {}
 void page_26(Player &player) {}
-void page_27(Player &player) {}
+void page_27(Player &player) {
+  std::cout << "\n\nWiping the thick green sap-blood from your sword you set "
+               "off north again. You are relieved to see that the trees are at "
+               "last beginning to thin out and appear less threatening.";
+  page_329(player);
+}
 void page_28(Player &player) {}
 void page_29(Player &player) {}
 void page_30(Player &player) {}
 void page_31(Player &player) {}
 void page_32(Player &player) {}
-void page_33(Player &player) {}
+void page_33(Player &player) {
+  std::cout
+      << "\n\nThe friar shakes his head, saying. \"There doesn't seem to be "
+         "any charity in the world anymore.\" With a shrug of the "
+         "shoulders he sets off south again. You watch him disappear "
+         "before continuing your journey north.";
+  page_390(player);
+}
 void page_34(Player &player) {}
 void page_35(Player &player) {}
-void page_36(Player &player) {}
+void page_36(Player &player) {
+
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout
+        << "\n\nThinking about the robed stranger you feel a little "
+           "uncomfortable. There was something about his manner that you did "
+           "not "
+           "trust. You stop and take a look in your backpack and are annoyed "
+           "to "
+           "find something is missing. The man was a thief! Deduct either "
+           "all "
+           "your remaining Gold Pieces or two of the magic items you may "
+           "have "
+           "purchased from Yaztromo from your Inventory.\n1. Subtract your "
+           "remaining Gold\n2. Loose 2 items from your Inventory Randomly.\n";
+
+    pick = choice();
+    std::cout
+        << "\n\nYou are in two minds whether or not to run after the thief "
+           "but you sense that he will not be twhere he said he was going. "
+           "You curse and start off north again.\n";
+    int pick1 = rand() % player.equipment.size();
+    int pick2 = rand() % player.equipment.size();
+    if (pick1 == pick2)
+      pick2 = rand() % player.equipment.size();
+
+    switch (pick) {
+    case 1:
+      std::cout << player.gold << "\n\nGold removed.";
+      player.gold = 0;
+      return; // Exit the loop and function after making a choice
+    case 2:
+      // std::cout << pick << " ---- " << i;
+      player.equipment.erase(player.equipment.begin() + pick1 - 1);
+      player.equipment.erase(player.equipment.begin() + pick2 - 1);
+      return; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+  next();
+  page_187(player);
+}
 void page_37(Player &player) {}
 void page_38(Player &player) {}
 void page_39(Player &player) {}
@@ -976,20 +1368,27 @@ void page_51(Player &player) {}
 void page_52(Player &player) {}
 void page_53(Player &player) {}
 void page_54(Player &player) {
-  std::cout << "\n\nAs you draw your sword, Yaztromo turns round and casually "
-               "advises you not to be foolish as his magic is great.\n\nDo you "
-               "still wish to attack him?";
-  std::cout << "\n1. Attack Yaztromo\n2. Continue following him.\n";
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout
+        << "\n\nAs you draw your sword, Yaztromo turns round and casually "
+           "advises you not to be foolish as his magic is great.\n\nDo you "
+           "still wish to attack him?";
+    std::cout << "\n1. Attack Yaztromo\n2. Continue following him.\n";
+    pick = choice();
 
-  int pick = choice();
-  switch (pick) {
-  case 1:
-    page_399(player);
-    break;
-  case 2:
-    page_261(player);
-    break;
-  }
+    switch (pick) {
+    case 1:
+      page_399(player);
+      return;
+    case 2:
+      page_261(player);
+      return;
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
 }
 void page_55(Player &player) {}
 void page_56(Player &player) {}
@@ -1012,7 +1411,13 @@ void page_72(Player &player) {}
 void page_73(Player &player) {}
 void page_74(Player &player) {}
 void page_75(Player &player) {}
-void page_76(Player &player) {}
+void page_76(Player &player) {
+  std::cout
+      << "\n\nThe path turns suddenly to the right and proceeds northwards "
+         "into the dense undergrowth.";
+  next();
+  page_206(player);
+}
 void page_77(Player &player) {}
 void page_78(Player &player) {}
 void page_79(Player &player) {}
@@ -1083,7 +1488,36 @@ void page_143(Player &player) {}
 void page_144(Player &player) {}
 void page_145(Player &player) {}
 void page_146(Player &player) {}
-void page_147(Player &player) {}
+void page_147(Player &player) {
+  int pick = 0;
+  do {
+    std::cout
+        << "\n\nYou look at the broken rockpile around your feet and wonder "
+           "how "
+           "such "
+           "a beast ever came into being - perhaps from the misused power of "
+           "an "
+           "evil elementalist? You will never know. If you wish to take a "
+           "piece "
+           "of stone that was part of the Boulder Beast for later examination, "
+           "note it on your Equipment List.\n1. Take a piece of Boulder Beast "
+           "with you\n2. Leave the stone\n";
+    int pick = choice();
+    switch (pick) {
+    case 1:
+      std::cout << "\n\nStone of Boulder Beast added to Inventory!";
+      player.equipment.push_back({"Stone of Boulder Beast", 10});
+      break;
+    case 2:
+      std::cout << "\n\nYou took nothing. Maybe it is cursed.";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+  std::cout << "\n\nYou now return to the path and head "
+               "north down into the valley.";
+  next();
+  page_245(player);
+}
 void page_148(Player &player) {}
 void page_149(Player &player) {}
 void page_150(Player &player) {}
@@ -1162,7 +1596,43 @@ void page_183(Player &player) {}
 void page_184(Player &player) {}
 void page_185(Player &player) {}
 void page_186(Player &player) {}
-void page_187(Player &player) {}
+void page_187(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout
+        << "\n\nWalking along the twisting path you see a small, sinewy "
+           "creature with brown, scaly skin sitting on a log on the right of "
+           "the path. He has a sullen expression on his face as he slowly "
+           "tosses a black shiny rod on a leather cord back and forth "
+           "between "
+           "his hands. He might be one of the Goblins you are looking for. "
+           "Will you:\n1. Draw your sword and attack the the Goblin?\n2. Try "
+           "to start a cnoversation with the Goblin?\n3. Ignore him and "
+           "continue walking north?\n4. View INVENTORY";
+
+    pick = choice();
+
+    switch (pick) {
+    case 1:
+      page_286(player);
+      break; // Exit the loop and function after making a choice
+    case 2:
+      page_203(player);
+      break; // Exit the loop and function after making a choice
+    case 3:
+      page_6(player);
+      break; // Go back to the loop to allow for another choice
+    case 4:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2 &&
+           pick != 3); // Loop until player picks WEST or EAST
+}
 void page_188(Player &player) {}
 void page_189(Player &player) {}
 void page_190(Player &player) {}
@@ -1181,7 +1651,34 @@ void page_202(Player &player) {}
 void page_203(Player &player) {}
 void page_204(Player &player) {}
 void page_205(Player &player) {}
-void page_206(Player &player) {}
+void page_206(Player &player) {
+
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout << "\n\nSuddenly off the path to your left you hear cries for "
+                 "help.\n1. If you wish to go to the aid of the person in "
+                 "trouble.\n2. If you would rather ignore the cries and "
+                 "continue your journey north.\n3. "
+                 "View INVENTORY\n";
+
+    pick = choice();
+
+    switch (pick) {
+    case 1:
+      page_253(player);
+      return; // Exit the loop and function after making a choice
+    case 2:
+      page_187(player);
+      return; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
 void page_207(Player &player) {}
 void page_208(Player &player) {}
 void page_209(Player &player) {}
@@ -1228,7 +1725,36 @@ void page_249(Player &player) {}
 void page_250(Player &player) {}
 void page_251(Player &player) {}
 void page_252(Player &player) {}
-void page_253(Player &player) {}
+void page_253(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout << "\n\nClambering over the gnarled roots of the old trees you "
+                 "head in the directino of the cris. After a few minutes you "
+                 "see a man dressed in long dark robes with his foot caught in "
+                 "a rusted rabbit snare. His face is masked by the robes and "
+                 "only his dark brown eyes are visible.\n1.If you want to help "
+                 "the man free his foot from the snare.\n2. If you decide "
+                 "against helping him, return to teh path and head north.\n3. "
+                 "View INVENTORY\n";
+
+    pick = choice();
+
+    switch (pick) {
+    case 1:
+      page_344(player);
+      return; // Exit the loop and function after making a choice
+    case 2:
+      page_187(player);
+      return; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
 void page_254(Player &player) {}
 void page_255(Player &player) {}
 void page_256(Player &player) {}
@@ -1382,7 +1908,37 @@ void page_285(Player &player) {}
 void page_286(Player &player) {}
 void page_287(Player &player) {}
 void page_288(Player &player) {}
-void page_289(Player &player) {}
+void page_289(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout
+        << "\n\nThe narrow, overgrown path continues to weave its way "
+           "through "
+           "the crowded forest. Strange animal cries echo through the trees. "
+           "It's not long before you arrive at another junction in the "
+           "path.\n1. "
+           "If you wish to continue westwards\n2. If you wish to turn "
+           "north.\n3. View Inventory\n";
+
+    pick = choice();
+
+    switch (pick) {
+    case 1:
+      page_76(player);
+      return; // Exit the loop and function after making a choice
+    case 2:
+      // TODO
+      page_147(player);
+      return; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
 void page_290(Player &player) {}
 void page_291(Player &player) {}
 void page_292(Player &player) {}
@@ -1437,7 +1993,23 @@ void page_340(Player &player) {}
 void page_341(Player &player) {}
 void page_342(Player &player) {}
 void page_343(Player &player) {}
-void page_344(Player &player) {}
+void page_344(Player &player) {
+  std::cout
+      << "\n\nYou wedge your sword between the jaws of the snare and pull on "
+         "it like a lever. The robed strager adds his strength and finally "
+         "the "
+         "snare springs open. He thanks you over and over again and explains "
+         "that he is in the forest looking for his long lost brother, who he "
+         "thinks is living the life of a hermit somewhere in its depths. "
+         "Together you scramble back over the roots of the trees to the "
+         "path. "
+         "You ask him to accompany you north but he politely declines saying "
+         "that he belives his brother lives to the south. You shake hands "
+         "and "
+         "bid each other farewall.";
+  next();
+  page_36;
+}
 void page_345(Player &player) {}
 void page_346(Player &player) {}
 void page_347(Player &player) {}
@@ -1495,10 +2067,12 @@ void page_398(Player &player) {}
 void page_399(Player &player) {
   std::cout
       << "\n\nYou charge at Yaztromo but only reach the first stair when he "
-         "lifts his right arm and nonchalantly mumbles a few words. Time seems "
+         "lifts his right arm and nonchalantly mumbles a few words. Time "
+         "seems "
          "to stand still amid bright flashes, and your body feels like a "
          "bubbling liquid inside. When the turmoil subsides, you know "
-         "something terrible happened. The stone stair feels cold on your body "
+         "something terrible happened. The stone stair feels cold on your "
+         "body "
          "and you realize the problems of a life as a frog! Yaztromo bends "
          "down and picks you up, saying with a booming voice:\n\n\"Well, "
          "foolish warrior, enjoy your new life!\"With that, he lets out a "
