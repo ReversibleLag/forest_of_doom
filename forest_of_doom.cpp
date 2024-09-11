@@ -3911,7 +3911,7 @@ void page_344(Player &player) {
          "and "
          "bid each other farewall.";
   next();
-  page_36;
+  page_36(player);
 }
 void page_345(Player &player) {}
 void page_346(Player &player) {}
