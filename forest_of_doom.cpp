@@ -64,6 +64,14 @@ public:
 
   // TODO Refactor code to use player.addluck instead of player.currluck -=
   // l9uck;
+  void removeGold(int goldToRemove) {
+    if (gold > goldToRemove) {
+      gold -= goldToRemove;
+    } else {
+      gold = 0;
+    }
+  }
+  void addGold(int goldToAdd) { gold += goldToAdd; }
   void addSkill(int addedSkill) { currSkill += addedSkill; }
   void addStamina(int addedStamina) { currStamina += addedStamina; }
   void addLuck(int addedLuck) { currLuck += addedLuck; }
@@ -101,7 +109,7 @@ public:
   }
 };
 void next();
-void battle();
+void battle(Player &player, Enemy &enemy, int turnsToEscape);
 void intro(Player &player);
 void background();
 int choice();
@@ -548,7 +556,7 @@ int choice() {
   return n;
 }
 
-void battle(Player &player, Enemy &enemy) {
+void battle(Player &player, Enemy &enemy, int turnsToEscape) {
   // The squence of combat is:
   // 1. Roll both dice once for the creature. Add its SKILL score. This total is
   // the creatures  Attack Strength.
@@ -572,6 +580,9 @@ void battle(Player &player, Enemy &enemy) {
   bool battling = true;
 
   while (battling) {
+    // If its been 3 turns allow them to escape if the option is given, pass in
+    // the amounnt of time needed before escape. add counter after each step.
+
     if (player.currStamina <= 0) {
       std::cout
           << "\n\nYou have perished in combat and your adventure ends here.";
@@ -587,7 +598,7 @@ void battle(Player &player, Enemy &enemy) {
     int playerRoll = (rand() % 6 + 1) + (rand() % 6 + 1);
     int enemyAttackScore = enemySkill + enemy.skill;
     int playerAttackScore = player.currSkill + playerRoll;
-    std::cout << "***Battle Phase*****";
+    std::cout << "***Battle Phase***";
     std::cout << "\n\nEnemies Skill: " << enemySkill;
     std::cout << "\nEnemies Attack Score: " << enemyAttackScore;
     std::cout << "\nRolling for Yourself: " << playerRoll;
@@ -1245,13 +1256,13 @@ void page_7(Player &player) {
 
   std::cout << "\n\nFirst KILLER BEE --- 7 SKILL --- 3 STAMINA\n";
   Enemy bee1("KILLER BEE", 7, 3);
-  battle(player, bee1);
+  battle(player, bee1, -1);
   std::cout << "\n\nSecond KILLER BEE --- 8 SKILL --- 4 STAMINA\n";
   Enemy bee2("KILLER BEE", 8, 4);
-  battle(player, bee2);
+  battle(player, bee2, -1);
   std::cout << "\n\nThird KILLER BEE --- 7 SKILL --- 4 STAMINA\n";
   Enemy bee3("KILLER BEE", 7, 4);
-  battle(player, bee3);
+  battle(player, bee3, -1);
   next();
   page_23(player);
 }
@@ -1288,7 +1299,7 @@ void page_9(Player &player) {
                "charges at you screaming.\nYou must fight\n";
   std::cout << "\n\nGOBLIN --- 5 SKILL --- 4 STAMINA\n";
   Enemy goblin("GOBLIN", 5, 4);
-  battle(player, goblin);
+  battle(player, goblin, -1);
   next();
   page_176(player);
 }
@@ -1401,8 +1412,42 @@ void page_12(Player &player) {
 
   } while (pick != 1 && pick != 2);
 }
-void page_13(Player &player) {}
-void page_14(Player &player) {}
+void page_13(Player &player) {
+  std::cout
+      << "\n\nThe vibrations feel like shock waves which seem to hammer your "
+         "body. Your legs feel like lead and you are unable to move them. "
+         "Suddenly the hut collapses and crashes to the ground. The sky "
+         "darkens and a wind starts to howl all about you. The wind blows "
+         "harder and becomes as strong as gale, its force knocking you to the "
+         "ground. You cling to the porch and shielf your face from the dirt "
+         "and debris thrown up by the gale. Above the deafening noise of the "
+         "wind you hear laughter followed by a deep voice rejoicing, \"I'm "
+         "free! I'm free!\" You have released an EARTH ELEMENTAL on to the "
+         "world.\n\nLose 3 LUCK points.\n\nGradually the howling wind dies "
+         "down "
+         "and the skies brighten. You pick yourself up from out of the rubble "
+         "and walk slowly back to the path to head north again.\n";
+  player.removeLuck(3);
+  next();
+  page_149(player);
+}
+void page_14(Player &player) {
+  std::cout
+      << "\n\nThe pit is circular with smooth sides and you are too weak from "
+         "your fall to climb out. You call for help, but nobody comes to your "
+         "aid. You sit down and ponder your fate. After about an hour you hear "
+         "a noise overhead. You look up to see the bearded face of a stocky "
+         "man wearing a fur hat. He looks annoyed. He is a fur trapper and you "
+         "have ruined his trap. He shouts down to you that if you expect him "
+         "to throw a rope down to rescue you, it is going to cost you 3 Gold "
+         "Pieces. Failing that, he will take any magical item you care to give "
+         "him from your backpack. After you agree to pay off the angry fur "
+         "trapper he throws down a rope to you and you climb out of the pit. "
+         "You hand over the feee, crossing it off your Equipment List, and "
+         "glare at the unfriendly fur trapper before setting off north again "
+         "down the gorge.\n";
+  player.removeGold(3);
+}
 void page_15(Player &player) {
   std::cout
       << "\n\nThe slope is steep and you slip on the slime, tumbing head "
@@ -1417,7 +1462,7 @@ void page_15(Player &player) {
 
   std::cout << "\n\nSTING WORM --- SKILL 8 --- STAMINA 7\n";
   Enemy stingworm("STING WORM", 8, 7);
-  battle(player, stingworm);
+  battle(player, stingworm, -1);
   page_217(player);
   return;
 }
@@ -1612,7 +1657,24 @@ void page_28(Player &player) {
   next();
   page_266(player);
 }
-void page_29(Player &player) {}
+void page_29(Player &player) {
+  std::cout
+      << "\n\nIn a small clearing amidst the trees you see two small creatures "
+         "with wary skin, dressed in leather armour. They appear to be "
+         "arguing over who should be in charge of the rabbit which is being "
+         "spit-roasted over an open fire. On seeing you, they cease their "
+         "argument and draw their short swords. You are going to have to fight "
+         "the ORCSadvancing towards you.\n";
+
+  std::cout << "\n\nFirst ORC --- SKILL 5 --- STAMINA 5\n";
+  std::cout << "\n\nSecond ORC --- SKILL 5 --- STAMINA 6\n";
+  Enemy orc1("First ORC", 5, 5);
+  Enemy orc2("Second ORC", 5, 6);
+  battle(player, orc1, 1);
+  battle(player, orc2, 1);
+  page_383(player);
+  return;
+}
 void page_30(Player &player) {
   std::cout
       << "\n\nLose 2 STAMINA points for the deep cut on your forehead.\n\n";
@@ -1865,10 +1927,10 @@ void page_43(Player &player) {
     case 1: {
       std::cout << "\n\nFirst WILD HILL MAN --- SKILL 7 --- STAMINA 5\n";
       Enemy WildHillMan1("First WILD HILL MAN", 7, 5);
-      battle(player, WildHillMan1);
+      battle(player, WildHillMan1, 1);
       std::cout << "\n\nSecond WILD HILL MAN --- SKILL 6 --- STAMINA 4\n";
       Enemy WildHillMan2("Second GREMLIN", 6, 4);
-      battle(player, WildHillMan2);
+      battle(player, WildHillMan2, 1);
       page_50(player);
       return;
     }
@@ -1994,10 +2056,10 @@ void page_49(Player &player) {
   player.currStamina -= 3;
   std::cout << "\n\nFirst GREMLIN --- SKILL 4 --- STAMINA 3\n";
   Enemy Gremlin1("First GREMLIN", 4, 3);
-  battle(player, Gremlin1);
+  battle(player, Gremlin1, -1);
   std::cout << "\n\nSecond GREMLIN --- SKILL 3 --- STAMINA 2\n";
   Enemy Gremlin2("Second GREMLIN", 3, 2);
-  battle(player, Gremlin2);
+  battle(player, Gremlin2, -1);
   player.currStamina += 3;
   next();
   page_371(player);
@@ -2352,7 +2414,7 @@ void page_71(Player &player) {
   player.currStamina -= 3;
   std::cout << "\n\nGREMLIN CHIEF --- SKILL 5 --- STAMINA 5\n";
   Enemy GremlinChief("GREMLIN CHIEF", 4, 3);
-  battle(player, GremlinChief);
+  battle(player, GremlinChief, -1);
   player.currStamina += 3;
   next();
   page_273(player);
@@ -2435,13 +2497,13 @@ void page_79(Player &player) {
 
   std::cout << "\n\nFirst VAMPIRE BAT --- 5 SKILL --- 5 STAMINA\n";
   Enemy vampirebat1("First VAMPIRE BAT", 5, 5);
-  battle(player, vampirebat1);
+  battle(player, vampirebat1, -1);
   std::cout << "\n\nSecond VAMPIRE BAT --- 6 SKILL --- 5 STAMINA\n";
   Enemy vampirebat2("Second VAMPIRE BAT", 6, 5);
-  battle(player, vampirebat2);
+  battle(player, vampirebat2, -1);
   std::cout << "\n\nThird VAMPIRE BAT --- 5 SKILL --- 7 STAMINA\n";
   Enemy vampirebat3("Third VAMPIRE BAT", 5, 7);
-  battle(player, vampirebat3);
+  battle(player, vampirebat3, -1);
   next();
   page_23(player);
 }
@@ -2524,7 +2586,7 @@ void page_84(Player &player) {
 
   std::cout << "\n\nThird VAMPIRE BAT --- 5 SKILL --- 7 STAMINA\n";
   Enemy vampirebat3("Third VAMPIRE BAT", 5, 7);
-  battle(player, vampirebat3);
+  battle(player, vampirebat3, 3);
   next();
   page_23(player);
 }
