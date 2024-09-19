@@ -5166,7 +5166,35 @@ void page_190(Player &player) {
     }
   } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
 }
-void page_191(Player &player) {}
+void page_191(Player &player) {
+
+  std::cout
+      << "\n\nThe friar is very nervous and jittery and shuffles from side to "
+         "side as you start to speak. You ask him why he is so distraught and "
+         "he tells you that his sacred brass bell has been stolen. As payment "
+         "for its return he is willing to offer a magic healing potion.";
+
+  std::cout << "\n\nDo you possess a Brass Bell?\n";
+  for (int i = 0; i <= player.equipment.size(); i++) {
+    if (player.equipment[i].getName() == "Brass Bell") {
+      std::cout << "\n1. Brass Bell?\n2. Return to the Path.\n";
+      int pick = choice();
+      switch (pick) {
+      case 1:
+        player.equipment.erase(player.equipment.begin() + i - 1);
+        std::cout << "\n\nBrass Bell Consumed.";
+        page_184(player);
+        break;
+      case 2:
+        page_243(player);
+        break;
+      }
+    }
+  }
+  std::cout << "\n\nYou do not possess the Brass Bell\n";
+  next();
+  page_243(player);
+}
 void page_192(Player &player) {
   int pick = 0; // Declare pick outside the loop to persist between iterations
   do {
