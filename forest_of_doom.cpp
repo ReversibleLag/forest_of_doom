@@ -2616,7 +2616,7 @@ void page_69(Player &player) {
 void page_70(Player &player) {
   std::cout
       << "\n\nThe sword is magnificent and was obviously made by a master "
-         "craftsman.  It feels powerful in your hand.\n\nAdd 2 points to "
+         "craftsman. It feels powerful in your hand.\n\nAdd 2 points to "
          "your "
          "current SKILL score for your enchanted sword.\nCutting your new "
          "weapon through the air you set off north down the gorge.\n";
@@ -4932,8 +4932,45 @@ void page_180(Player &player) {
     }
   } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
 }
-void page_181(Player &player) {}
-void page_182(Player &player) {}
+void page_181(Player &player) {
+  std::cout
+      << "\n\nYou walk along the steps through the waterfall into a large "
+         "cavern where there is a pool of water. The steps run round the side "
+         "of the pool and there is a stone table and chair on teh far side. "
+         "You go to the table and see fish scraps lying on it. Suddenly you "
+         "hear a noise of splashing behind you. A strange creature climbs out "
+         "of the pool and advances towards you armed with a trident. His legs "
+         "are like a man's, but his face and torso resemble a large green fish "
+         "with bulbous eyes. His arms are like yours but are covered with "
+         "large scales. He is a FISH MAN and you must fight him.\n";
+  std::cout << "\n\nFISH MAN --- SKILL 7 --- STAMINA 6\n";
+  Enemy fish("FISH MAN", 7, 6);
+  battle(player, fish, -1);
+  next();
+  page_162(player);
+}
+void page_182(Player &player) {
+  std::cout << "You take hold of the sword and place your foot against the "
+               "rock. Roll two dice.\n\n";
+  next();
+  int playerRoll = (rand() % 6 + 1) + (rand() % 6 + 1);
+  std::cout << "\n\nYou rolled a: " << playerRoll;
+  if (playerRoll <= player.currLuck) {
+    // LUCKY
+    std::cout << "\n\nThe sword slowly slides out of the rock!\n";
+    player.removeLuck(1);
+
+    next();
+    page_70(player);
+  } else {
+    // UNLUCKY
+    std::cout << "\n\nYou tire and are forced to give up and continue north "
+                 "down the gorge.\n";
+  }
+  player.removeLuck(1);
+  next();
+  page_334(player);
+}
 void page_183(Player &player) {
   std::cout
       << "\n\nYou slowly inhale the poisonous air around you, but all is "
@@ -4945,9 +4982,66 @@ void page_183(Player &player) {
   next();
   page_293(player);
 }
-void page_184(Player &player) {}
-void page_185(Player &player) {}
-void page_186(Player &player) {}
+void page_184(Player &player) {
+  std::cout
+      << "\n\nYou explain to the friar that you took a brass bell from a Cabe "
+         "Troll in the hills. You show it to him and he jumps for joy, "
+         "shouting, \"Oh mercy, what fortune, what fortune.\" He reaches into "
+         "a leather pouch on the string belt around his waist and pulls out a "
+         "small glass phial. You give  him the brass bell and take the glass "
+         "phial. You uncork the phial and drink its contents.\n\nAdd 4 points "
+         "to your STAMINA score.\n\nThe frair shakes your hand, thanking you "
+         "over and over again. At last you part company, with you continuing "
+         "north and the friar walking south.\n";
+  player.addStamina(4);
+  next();
+  page_390(player);
+}
+void page_185(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout
+        << "\n\nYou are surpised to see no mark so sign of injury on your "
+           "hand. You try to put your hand back into the vase but an invisible "
+           "barrier across the opening stops you from doing so. You may "
+           "either:\n1. Drop the vase to the ground to smash it.\n2. Put it "
+           "down on the porch and return to the path to head north again.\n3. "
+           "View INVENTORY";
+
+    pick = choice();
+
+    switch (pick) {
+    case 1:
+      page_250(player);
+      break; // Exit the loop and function after making a choice
+    case 2:
+      page_149(player);
+      break; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
+void page_186(Player &player) {
+  std::cout
+      << "\n\nYou step into the water and star tto waade across the river. The "
+         "water is quite murky and although the level only rises to your waist "
+         "you feel somewhat vulnerable to creature that may live in the river. "
+         "Suddenly your fears are realized - you feel sharp teeth sinking into "
+         "your thigh. You reach down into the water and feel the long thin "
+         "body a BLOOD EEL extending from your leg. You draw your sword and "
+         "start to stab at the water.\n";
+  std::cout << "\n\nBLOOD EEL --- SKILL 7 --- STAMINA 6\n";
+  Enemy blood_eel("BLOOD EEL", 7, 6);
+  battle(player, blood_eel, -1);
+  next();
+  page_131(player);
+}
 void page_187(Player &player) {
   int pick = 0; // Declare pick outside the loop to persist between iterations
   do {
