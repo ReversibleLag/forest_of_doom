@@ -5455,8 +5455,35 @@ void page_221(Player &player) {
     }
   } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
 }
-void page_222(Player &player) {}
-void page_223(Player &player) {}
+void page_222(Player &player) {
+  std::cout << "\n\nThere is no escaping the poisonous gas cloud which has "
+               "enveloped you. Your lungs feel as if they are bursting and you "
+               "are forced to inhale. Reduce your STAMINA score by the amount "
+               "of one die roll. If you are still alive you see th ecloud "
+               "drift away at last and you are able to breathe freely again. "
+               "There does not seem to be much point in staying here any "
+               "longer and you walk over to the steps on the far wall.\n";
+  int playerRoll = (rand() % 6 + 1);
+  std::cout << "\n\nRolled a " << playerRoll << std::endl;
+  player.removeStamina(playerRoll);
+  next();
+  page_293(player);
+}
+void page_223(Player &player) {
+  std::cout
+      << "\n\nThe jewel hanging round  your neck starts to glow. Perhaps "
+         "Arragon is not all that he says he is. You draw your sword and "
+         "challenge him. The expression on Arragon's face changes from "
+         "confidence to fear. He then apologizes for being so aggressive but "
+         "explains that these lands are filled with bandits and murderers and "
+         "he has to protect himself by pretending to be a wizard of supreme "
+         "power. He begs forgiveness and fofers you 5 Gold Pieces if you will "
+         "leave him in peace and tell nobody of his disguise. You accept his "
+         "offer and leave his cottage. You walk back to the junction in the "
+         "passage and head north.\n";
+  next();
+  page_150(player);
+}
 void page_224(Player &player) {}
 void page_225(Player &player) {}
 void page_226(Player &player) {
@@ -6077,23 +6104,50 @@ void page_312(Player &player) {}
 void page_313(Player &player) {}
 void page_314(Player &player) {}
 void page_315(Player &player) {}
-void page_316(Player &player) {}
+void page_316(Player &player) {
+  std::cout << "\n\nEventually you manage to get back to sleep but have a "
+               "restless night. In the morning you collect your belonging and "
+               "head north along the path into the hills.\n";
+  next();
+  page_198(player);
+}
 void page_317(Player &player) {}
 void page_318(Player &player) {}
 void page_319(Player &player) {}
 void page_320(Player &player) {}
-void page_321(Player &player) {}
+void page_321(Player &player) {
+  std::cout
+      << "\n\nAs each Clone Warrior dies, it  dissolves into a pool of colored "
+         "liquid on the rocky floor. Not wishing to stay in this dank and musy "
+         "alcove any longer, you leave and club further up the steps.\n";
+  next();
+  page_107(player);
+}
 void page_322(Player &player) {}
 void page_323(Player &player) {}
 void page_324(Player &player) {}
 void page_325(Player &player) {}
-void page_326(Player &player) {}
+void page_326(Player &player) {
+  std::cout
+      << "\n\nYou soon arrive at another junction in the path. Looking at "
+         "Bigleg's map you decide to head north again in the direction of "
+         "Stonebridge, ignoring the narrow path which continues west.\n";
+  next();
+  page_145(player);
+}
 void page_327(Player &player) {}
 void page_328(Player &player) {}
 void page_329(Player &player) {}
 void page_330(Player &player) {}
 void page_331(Player &player) {}
-void page_332(Player &player) {}
+void page_332(Player &player) {
+  std::cout
+      << "\n\nYou soon arrive at another junction in the path. Looking at "
+         "Bigleg's map you decide to head north again in the direction of "
+         "Stonebridge, ignoring the narrow path which continues west.\n";
+  next();
+  page_103(player);
+}
 void page_333(Player &player) {}
 void page_334(Player &player) {}
 void page_335(Player &player) {}
@@ -6128,28 +6182,355 @@ void page_347(Player &player) {}
 void page_348(Player &player) {}
 void page_349(Player &player) {}
 void page_350(Player &player) {}
-void page_351(Player &player) {}
-void page_352(Player &player) {}
-void page_353(Player &player) {}
-void page_354(Player &player) {}
-void page_355(Player &player) {}
-void page_356(Player &player) {}
-void page_357(Player &player) {}
-void page_358(Player &player) {}
-void page_359(Player &player) {}
-void page_360(Player &player) {}
-void page_361(Player &player) {}
-void page_362(Player &player) {}
-void page_363(Player &player) {}
+void page_351(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout << "\n\nYou step carefully down the stone stairs, feeling your "
+                 "way as you go. Slowly your eyes become accustomed to the "
+                 "dark and you begin to make out shapes at the bottom of the "
+                 "stairs. You are standing in a small, square room with a low "
+                 "ceiling. The floor is thick with dust and there are cobwebs "
+                 "everywhere. In the middle of the room there is what appears "
+                 "to be a large stone box, measuring approximately two metres "
+                 "by one metre.  The top of it is a great stone slab. Along "
+                 "one of the rough stone walls you find a small alcove with a "
+                 "candle in it.\n1. You may either light the candle. \n2. Walk "
+                 "back  up the stairs, return to the path and head north.\n3. "
+                 "View Inventory\n";
+
+    pick = choice();
+
+    switch (pick) {
+    case 1:
+      page_292(player);
+      return; // Exit the loop and function after making a choice
+    case 2:
+      page_112(player);
+      return; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
+void page_352(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+
+    std::cout
+        << "\n\nThe Ape Man is very agile around the tree, and you have "
+           "difficultybrandishing your sword. You must deduct 2 from your "
+           "Attack Strength during each round of combat.\n1. Fight the APE "
+           "MAN. \n2. Escape by jumping off the platform to the ground five "
+           "metres below.\n";
+
+    pick = choice();
+
+    switch (pick) {
+    case 1: {
+      player.removeSkill(2);
+      std::cout << "\n\nAPE MAN --- SKILL 8 --- STAMINA 7\n";
+      Enemy ape_man("APE MAN", 8, 7);
+      battle(player, ape_man, -1);
+      player.addSkill(2);
+      next();
+      page_207(player);
+      return;
+    } // Exit the loop and function after making a choice}
+
+    case 2:
+      page_156(player);
+      return; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
+void page_353(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout << "\n\nWhen you awake you find that  you are lying on the "
+                 "ground outside the wodden hut. You sit up and look inside "
+                 "your backpack. All your provisions have been stolen! Luckily "
+                 "nothing else is gone and you still have your sword. You "
+                 "looko inside the hut but it is deserted. \n1. If you wish to "
+                 "search the hut for something useful. \n2. If you would "
+                 "rather leave the hut, return to the path and head north.\n3. "
+                 "View Inventory\n";
+
+    pick = choice();
+
+    switch (pick) {
+    case 1:
+      page_26(player);
+      return; // Exit the loop and function after making a choice
+    case 2:
+      page_220(player);
+      return; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
+void page_354(Player &player) {
+  // TODO check the references to this path and see if the player gets the
+  // phials before on needs to get them here.
+  std::cout << "\n\nQuin shakes his head in disbelief. He stands up and walkes "
+               "silently to a wooden chest at the back of the hut. He lifts "
+               "the lid and pulls out a small glass phial. He hands it to you "
+               "and walks back to the table where be slumps in his chair "
+               "looking thoroughly dejected. The dust in the phial sparkles in "
+               "the light and you put it into your backpack and leave the hut. "
+               "Outside you walk back to the junction in the path.\n";
+  next();
+  page_340(player);
+}
+void page_355(Player &player) {
+  std::cout << "\n\nYou arrive at another junction in the path. Ignoring the "
+               "way south, you continue east.\n";
+  next();
+  page_340(player);
+}
+void page_356(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout << "\n\nStuffed inside the Forest Giant;s clothing you find a "
+                 "brass lantern with a green wick. There is no liquid inside "
+                 "it to burn. Perhaps it is a magic latern. You may:\n\n1. Rub "
+                 "the lantern and make a wish. \n2. Try to light the wick\n 3. "
+                 "Throw the lamp away and head north. \n4. "
+                 "View Inventory\n";
+
+    pick = choice();
+
+    switch (pick) {
+    case 1:
+      page_34(player);
+      return; // Exit the loop and function after making a choice
+    case 2:
+      page_395(player);
+      return; // Exit the loop and function after making a choice
+    case 3:
+      page_231(player);
+      return; // Exit the loop and function after making a choice
+    case 4:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
+void page_357(Player &player) {
+  std::cout << "\n\nAs you walk west along the twisting path you pass another "
+               "branch leading south to the valley. You ignore it and press on "
+               "west. Eventually the path ends at a junction. Again, ingnoring "
+               "the way south to the valley, you turn north.\n";
+  next();
+  page_306(player);
+}
+void page_358(Player &player) {
+
+  std::cout
+      << "\n\nWalking along the path, you do not notice a rope noose hidden "
+         "beneath some fallen leaves ahead of you. Your foot catches in the "
+         "noose and suddenly you are hauled inot the air by the rope which "
+         "is tied to a sprung tree. In a second you are hanging upside down, "
+         "suspended by your trapped foot. \n\nTest your Luck.\n\n \n3. "
+         "View Inventory\n";
+
+  std::cout << "\n\nTest your luck\n\n";
+  next();
+  int playerRoll = (rand() % 6 + 1) + (rand() % 6 + 1);
+  std::cout << "\n\nYou rolled a: " << playerRoll;
+  if (playerRoll <= player.currLuck) {
+    // LUCKY
+    std::cout << "\n\nLucky! Your sword remains in its scabbard, and you are "
+                 "able to use it to cut yourself down from the man trap.\n";
+    player.removeLuck(1);
+    next();
+    page_40(player);
+  } else {
+    // UNLUCKY
+    std::cout << "\n\nUnlucky. Your sword slips from its scabbard and drops to "
+                 "the ground, leaving you dangling helplessly.\n";
+  }
+  player.removeLuck(1);
+  next();
+  page_218(player);
+}
+void page_359(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout
+        << "\n\nTo the left of the path you see a stone well with a bucket "
+           "and "
+           "turning handle. \n1. If you wish to take a closer look at the "
+           "well.\n2. If you would rather continue your walk east.\n3. "
+           "View Inventory\n";
+
+    pick = choice();
+
+    switch (pick) {
+    case 1:
+      page_172(player);
+      return; // Exit the loop and function after making a choice
+    case 2:
+      page_281(player);
+      return; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
+void page_360(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout
+        << "\n\nWalking along the narrow path you suddenly hear the sharp "
+           "crack of a twig breaking and the whispering of low voices. You "
+           "draw your sword and wait anxiously with your back to a large oak "
+           "tree. Then from behind the trees opposite you step four men and "
+           "a "
+           "woman dressed in green tunics. Each looks menacing and they "
+           "stand "
+           "with swords and axes in their hands. The young woman steps "
+           "forward "
+           "and tells you that you are trespassing on their territory and "
+           "you "
+           "must pay a levy of five object from your backpack or face the "
+           "consequences.\n1. If you wish to give them what they want.\n2. "
+           "If "
+           "you would rather spit on the ground in reply and fight them.\n3. "
+           "View Inventory\n";
+
+    pick = choice();
+
+    switch (pick) {
+    case 1:
+      page_279(player);
+      return; // Exit the loop and function after making a choice
+    case 2:
+      page_104(player);
+      return; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
+void page_361(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout
+        << "\n\nFrom not too far ahead comes the sharp noise of barking dogs "
+           "drawing nearer. Suddenly a brown fox with eyes wide open in fear "
+           "dashes past you running east. The frantic yelping of the dogs "
+           "get "
+           "louder.\n1. If you wish to face the oncoming pack of dogs\n2. If "
+           "you would rather hide in the tall grasses off the path and let "
+           "them run past in pursuit of the fox.\n3. View Inventory\n";
+
+    pick = choice();
+
+    switch (pick) {
+    case 1:
+      page_396(player);
+      return; // Exit the loop and function after making a choice
+    case 2:
+      page_86(player);
+      return; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
+void page_362(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout << "\n\nWhich way are you heading?\n1. If you wish to continue "
+                 "east.\n2. If you wish to continue west.\n3. View Inventory\n";
+
+    pick = choice();
+
+    switch (pick) {
+    case 1:
+      page_281(player);
+      return; // Exit the loop and function after making a choice
+    case 2:
+      page_238(player);
+      return; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
+void page_363(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout
+        << "\n\nYou rummage through the Dwarf's backpack and find a corked "
+           "bottle containing a clear liquid.\n1. If you wish to drink the "
+           "contents of the bottle.\n2. If you would rather leave the bottle "
+           "and set off east again along the path.\n3. View Inventory\n";
+
+    pick = choice();
+
+    switch (pick) {
+    case 1:
+      page_68(player);
+      return; // Exit the loop and function after making a choice
+    case 2:
+      page_59(player);
+      return; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
 void page_364(Player &player) {
   int pick = 0; // Declare pick outside the loop to persist between iterations
   do {
     std::cout
-        << "\n\nYou nod your head at the masked rider and bid him good-day. He "
-           "nods back but says nothing. You tell him of your quest to help the "
+        << "\n\nYou nod your head at the masked rider and bid him good-day. "
+           "He "
+           "nods back but says nothing. You tell him of your quest to help "
+           "the "
            "dwarfs of Stonebridge; he then jumps down from his mount, throws "
            "back his cape and extends his right arm to shake your hand. You "
-           "see that each of his fingers is adorned by a large gold ring. Will "
+           "see that each of his fingers is adorned by a large gold ring. "
+           "Will "
            "you:\n1. Attack him for his gold?\n2. Carry on the "
            "conversation?\n3. View Inventory\n";
 
@@ -6216,7 +6597,8 @@ void page_366(Player &player) {
 void page_367(Player &player) {
   std::cout
       << "\n\nThere is a soft popping sound as the head of the fungus splits "
-         "open followed by the hiss of escaping gas. You become enveloped by a "
+         "open followed by the hiss of escaping gas. You become enveloped by "
+         "a "
          "cloud of poisonous gas.\n1. Do you possess Nose Filters?\n";
   for (int i = 0; i <= player.equipment.size(); i++) {
     if (player.equipment[i].getName() == "Nose Filters") {
@@ -6250,10 +6632,12 @@ void page_369(Player &player) {
   int pick = 0; // Declare pick outside the loop to persist between iterations
   do {
     std::cout
-        << "\n\nThe valley floor is green and pleasant and you wonder why such "
+        << "\n\nThe valley floor is green and pleasant and you wonder why "
+           "such "
            "a tranquil place should be the home of so many loathsome "
            "creatures. Walking along the path, you see in the distance the "
-           "portly shape of a balding man dressed in long brown robes heading "
+           "portly shape of a balding man dressed in long brown robes "
+           "heading "
            "in your direction. As he gets closer you see that he is a friar. "
            "Will you:\n1. Start a conversation with him?\n2. Walk past him "
            "with a nod of the head?\n3. View Inventory\n";
@@ -6280,7 +6664,8 @@ void page_370(Player &player) {
   std::cout
       << "\n\nYou frantically grope about in total darkness. Slowly your "
          "vision returns and you stand up again. With your own sight fully "
-         "restored you set off north again along the path. However, while you "
+         "restored you set off north again along the path. However, while "
+         "you "
          "were on the ground an item fell out of your backpack.\n";
   int pick1 = rand() % player.equipment.size();
 
@@ -6290,14 +6675,17 @@ void page_370(Player &player) {
   page_231(player);
 }
 void page_371(Player &player) {
-  std::cout
-      << "\n\nThere are many hand-made clay figures of human hands in "
-         "different positions covering every available surface area. They are  "
-         "all painted with bright red glaze. In a copper vase you find 3 Gold "
-         "Pieces, which you put in your backpack. There is nothing else of use "
-         "or value to you in the cave. You leave by crawling back the way you "
-         "came to the junction, taking a clay hand with you if you "
-         "wish.\n\nClay Hand added to your inventory!\n";
+  std::cout << "\n\nThere are many hand-made clay figures of human hands in "
+               "different positions covering every available surface area. "
+               "They are  "
+               "all painted with bright red glaze. In a copper vase you find "
+               "3 Gold "
+               "Pieces, which you put in your backpack. There is nothing "
+               "else of use "
+               "or value to you in the cave. You leave by crawling back the "
+               "way you "
+               "came to the junction, taking a clay hand with you if you "
+               "wish.\n\nClay Hand added to your inventory!\n";
   player.addGold(3);
   player.equipment.push_back({"Clay Hand", 1});
   next();
@@ -6306,9 +6694,9 @@ void page_371(Player &player) {
 void page_372(Player &player) {
   int pick = 0; // Declare pick outside the loop to persist between iterations
   do {
-    std::cout
-        << "\n\nYou bend down and try to lift the chest but it is very heavy. "
-           "Roll two dice.\n";
+    std::cout << "\n\nYou bend down and try to lift the chest but it is very "
+                 "heavy. "
+                 "Roll two dice.\n";
     next();
     int playerRoll = (rand() % 6 + 1) + (rand() % 6 + 1);
     std::cout << "\n\nYou rolled a: " << playerRoll;
@@ -6349,7 +6737,8 @@ void page_373(Player &player) {
   do {
     std::cout
         << "\n\nYou slump on to the log exhausted after your long battle. "
-           "Sadly, the black rod was just part of the Shape Changer's illusion "
+           "Sadly, the black rod was just part of the Shape Changer's "
+           "illusion "
            "and it exists no more. However, you notice some violet mushrooms "
            "growing behind the log. They are unfamiliar to you but look "
            "tasty.\n1. If you wish to eat some of the musthrooms.\n2. If you "
@@ -6378,8 +6767,10 @@ void page_374(Player &player) {
   do {
     std::cout
         << "\n\nYou slip the gauntlet on to your hand and take hold of your "
-           "sword. Slicing the air with it you feel more than usually skilled "
-           "with your weapon. You now possess a Gauntlet of Weapon Skill which "
+           "sword. Slicing the air with it you feel more than usually "
+           "skilled "
+           "with your weapon. You now possess a Gauntlet of Weapon Skill "
+           "which "
            "will allow you to add 1 point to all future dice rolls when "
            "comuting your own Attack Strength during combat so long as you "
            "wear it.\n\nGauntlet of Weapon Skill added to your "
@@ -6462,7 +6853,8 @@ void page_377(Player &player) {
       << "\n\nYou quickly catch up with the two brown-skinned Pygmies. They "
          "are "
          "wearing grass skirts and as they stop and turn to face you, you "
-         "notice that each has a small bone through his nose. They draw their "
+         "notice that each has a small bone through his nose. They draw "
+         "their "
          "daggers and both attack you.\n";
   std::cout << "\n\nPYGMY A --- SKILL 5 --- STAMINA 5\n";
   Enemy pygmyA("PYGMY A", 5, 5);
@@ -6491,7 +6883,8 @@ void page_378(Player &player) {
         << "\n\nTo the left of the path you see a small man with a long grey "
            "beard sitting cross-legged on top of a huge mushroom. He is "
            "wearing a bright red jacket and cap, and his trousers are black "
-           "and end at his knees. He is asleep and is snoring loudly.\n1. You "
+           "and end at his knees. He is asleep and is snoring loudly.\n1. "
+           "You "
            "may either give him a gentle push to wake him up.\n2. Or walk "
            "quietly past him to continue your journey.\n3. View Inventory\n";
 
@@ -6595,12 +6988,15 @@ void page_384(Player &player) {
         << "\n\nAhead in the grasses you hear a low moan. You look up to see "
            "the vultures patiently waiting overhead. A few steps further and "
            "you s ee the ugly sight of a huge man with muscles like knotted "
-           "iron staked out to the ground. His arms and legs are tied to four "
+           "iron staked out to the ground. His arms and legs are tied to "
+           "four "
            "large wooden pegs driven deep into the ground. The man is naked "
-           "except for a small loin cloth and his skin is badly blistered from "
+           "except for a small loin cloth and his skin is badly blistered "
+           "from "
            "the sun. His face and chest show the bloodied signs of cruel "
            "torture. His captors will not have gained the information they  "
-           "sought from him because he is a BARBARIAN!\n1. If you wish to cut "
+           "sought from him because he is a BARBARIAN!\n1. If you wish to "
+           "cut "
            "him free.\n2. If you want to leave him in his agony, and treutnr "
            "to the path to head north.\n3. View Inventory\n";
 
@@ -6683,8 +7079,10 @@ void page_389(Player &player) {
   int pick = 0; // Declare pick outside the loop to persist between iterations
   do {
     std::cout
-        << "\n\nYou raise your sword above your head and smash it down on the "
-           "wooden chest. It splinters into tiny pieces and amongst the broken "
+        << "\n\nYou raise your sword above your head and smash it down on "
+           "the "
+           "wooden chest. It splinters into tiny pieces and amongst the "
+           "broken "
            "bits of wood you find\n\n8 Gold Pieces.\n\nAdd 1 LUCK point.\n1. "
            "You may look into the barrel.\n2. You may leave the alcove to "
            "climb further up the steps.\n3. View Inventory\n";
@@ -6713,8 +7111,10 @@ void page_390(Player &player) {
     std::cout
         << "\n\nIn the distance you see the dark brown wall of trees molling "
            "up before you. The path leads directly into Darkwood Forest and "
-           "soon starts to twist and turn betwen tangled roots and bushes. The "
-           "path eventually splits.\n1. If you wish to continue north.\n2. If "
+           "soon starts to twist and turn betwen tangled roots and bushes. "
+           "The "
+           "path eventually splits.\n1. If you wish to continue north.\n2. "
+           "If "
            "you wish to head west?\n3. View Inventory\n";
 
     pick = choice();
@@ -6783,9 +7183,12 @@ void page_394(Player &player) {
     std::cout
         << "\n\nGradually the grass around you becomes shorter as the ground "
            "gently starts to rise. Ahead you can hear the sound of flowing "
-           "water. Soon you reach the bank of a slow-flowing river. The river "
-           "is very shallow and stepping stone cross it to the far bank where "
-           "the path continue north into the distance. Will you:\n1. Cross the "
+           "water. Soon you reach the bank of a slow-flowing river. The "
+           "river "
+           "is very shallow and stepping stone cross it to the far bank "
+           "where "
+           "the path continue north into the distance. Will you:\n1. Cross "
+           "the "
            "river by the stepping stones?\n2. Wade through the shallow water "
            "across the river?\n3. View Inventory\n";
 
@@ -6838,11 +7241,14 @@ void page_396(Player &player) {
            "come into view in a cloud of dust; galloping behind them is a "
            "masked rider wearing a long flowing cloak and riding a white "
            "stallion. He blows a horn and the pack of dogs comes to a sudden "
-           "halt in front of you. There ar efour of them and you see that they "
+           "halt in front of you. There ar efour of them and you see that "
+           "they "
            "are hunting dogs. The stallion stand motionless behind them with "
            "steam blowing from its nostrils in two long jets. The masked man "
-           "looks at you without speaking. Will you:\n1. Start a conversation "
-           "with him?\n2. Attack the dog nearest to you?\n3. View Inventory\n";
+           "looks at you without speaking. Will you:\n1. Start a "
+           "conversation "
+           "with him?\n2. Attack the dog nearest to you?\n3. View "
+           "Inventory\n";
 
     pick = choice();
 
