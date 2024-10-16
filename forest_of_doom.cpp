@@ -41,6 +41,11 @@ public:
   int currLuck = 0;
 
   int gold = 0;
+  // If positive then has buff
+  // If negative then has debuff
+  int tempDiceBuff = 0;
+  // if negative then has a buff
+  // if positive has debuff
   int diceDebuff = 0;
   // 1 Potion of SKILL
   // 2 Potion of STRENGTH
@@ -97,6 +102,8 @@ public:
   }
   void removeDiceDebuff(int debuff) { diceDebuff += debuff; }
   void addDiceDebuff(int debuff) { diceDebuff -= debuff; }
+  void removeTempDiceBuff(int tempBuff) { tempDiceBuff -= tempBuff; }
+  void addTempDiceBuff(int tempBuff) { tempDiceBuff += tempBuff; }
 };
 
 class Enemy {
@@ -587,6 +594,7 @@ bool battle(Player &player, Enemy &enemy, int turnsToEscape) {
   int pick = 0; // Declare pick outside the loop to persist between iterations
   bool battling = true;
   int turns = 0;
+  int playerAttackScore;
   while (battling) {
 
     // If its been 3 turns allow them to escape if the option is given, pass in
@@ -606,7 +614,13 @@ bool battle(Player &player, Enemy &enemy, int turnsToEscape) {
     int enemySkill = (rand() % 6 + 1) + (rand() % 6 + 1);
     int playerRoll = (rand() % 6 + 1) + (rand() % 6 + 1);
     int enemyAttackScore = enemySkill + enemy.skill;
-    int playerAttackScore = player.currSkill + playerRoll + player.diceDebuff;
+    if (player.tempDiceBuff > 0) {
+      playerAttackScore = player.currSkill + playerRoll + player.diceDebuff + 1;
+      player.removeTempDiceBuff(1);
+    } else {
+
+      playerAttackScore = player.currSkill + playerRoll + player.diceDebuff;
+    }
     std::cout << "***Battle Phase***";
     std::cout << "\n\nEnemies Skill: " << enemySkill;
     std::cout << "\nEnemies Attack Score: " << enemyAttackScore;
@@ -6265,7 +6279,31 @@ void page_236(Player &player) {
     }
   } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
 }
-void page_237(Player &player) {}
+void page_237(Player &player) {
+  std::cout << "\n\nYou land heavily on the ground, and you hear an ugly "
+               "snapping sound. Pain shoots through your leg and you realize "
+               "it is broken.\n\nLose 2 LUCK points.\n\nDo you possess a "
+               "Potion of Healing?\n";
+  for (int i = 0; i <= player.equipment.size(); i++) {
+    if (player.equipment[i].getName() == "Potion of Healing") {
+      std::cout << "\n1. Use the Potion of Healing?\n2. Do not use them.\n";
+      int pick = choice();
+      switch (pick) {
+      case 1:
+        player.equipment.erase(player.equipment.begin() + i - 1);
+        std::cout << "\n\nPotion of Healing Consumed.";
+        page_214(player);
+        break;
+      case 2:
+        page_304(player);
+        break;
+      }
+    }
+  }
+  std::cout << "\n\nYou do not possess the Potion of Healing\n";
+  next();
+  page_304(player);
+}
 void page_238(Player &player) {
   std::cout << "\n\nWalking west along the valley floor, you pass a junction "
                "in the path, which leads south and back into the hills. You "
@@ -6892,9 +6930,91 @@ void page_261(Player &player) {
   // page_12(player);
   page_301(player);
 }
-void page_262(Player &player) {}
-void page_263(Player &player) {}
-void page_264(Player &player) {}
+void page_262(Player &player) {
+  std::cout
+      << "\n\nYou look at the bottle in your hand and then quickly gulp down "
+         "its contents. You wait several seconds for some reaction, but "
+         "nothing happens. However, when you come to pick up your sword, which "
+         "you had put down to examine the backpack, a surge of confidence runs "
+         "through your body. The liquid is a Potion of Weapon Skill which will "
+         "allow you to add 1 point to future dice rolls when computing your "
+         "own Attack Strength during combat. Its effect will last for your "
+         "next two combat encounters. Taking the gold, you scramble up out of "
+         "the earthen cavern to the path above and continue your journey "
+         "northwards.\n";
+  // Adds temporary dice addition for 2 battle turns
+  player.addTempDiceBuff(2);
+  next();
+  page_337(player);
+}
+void page_263(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout
+        << "\n\nThere is not much of interest to be found in the cave. A "
+           "straw bed, stone jars, a table and chair are all that is "
+           "immediately visible,  but on a stone shelf above the bed, a "
+           "small silver box catches your eye.\n1. If you want to open the "
+           "silver box.\n2. If you would rather leave the cave and go "
+           "north up the path without the silver box.\n3. View INVENTORY\n";
+
+    pick = choice();
+
+    switch (pick) {
+    case 1:
+      page_126(player);
+      break; // Exit the loop and function after making a choice
+    case 2:
+      page_358(player);
+      break; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
+void page_264(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout
+        << "\n\nThe small humanoid is a clone and has no will of its own. It "
+           "puts up no defence. Your sword cleaves its head from its shoulders "
+           "and it slumps to the ground. The others take no notice of you. You "
+           "wonder who is controlling them all. Suddenly you notice that the "
+           "cloned humanoid that you beheaded is dissolving into a pool of "
+           "purple liquid and a new fungus sprouts out of the soil. As the "
+           "fungus rises, the purple pool drains into the ground. The fungus "
+           "has a purple top which moves round to face you. You may:\n1. Stay "
+           "to watch the purple topped fungus.\n2. Head towards the "
+           "green-topped fungus.\n3. Head towards the red-topped fungus.\n4. "
+           "View INVENTORY\n";
+
+    pick = choice();
+
+    switch (pick) {
+    case 1:
+      page_367(player);
+      break; // Exit the loop and function after making a choice
+    case 2:
+      page_189(player);
+      break; // Exit the loop and function after making a choice
+    case 3:
+      page_282(player);
+      break; // Exit the loop and function after making a choice
+    case 4:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
 void page_265(Player &player) {}
 void page_266(Player &player) {}
 void page_267(Player &player) {}
