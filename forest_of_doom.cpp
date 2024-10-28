@@ -7017,10 +7017,90 @@ void page_264(Player &player) {
 }
 void page_265(Player &player) {}
 void page_266(Player &player) {}
-void page_267(Player &player) {}
-void page_268(Player &player) {}
-void page_269(Player &player) {}
-void page_270(Player &player) {}
+void page_267(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout << "\n\nThe path leads to a large cave entrance and does not "
+                 "appear to go any further east.\n1. If you want to enter the "
+                 "cave.\n2. If you would rather return to the junction and go "
+                 "north.\n3. View INVENTORY\n";
+
+    pick = choice();
+
+    switch (pick) {
+    case 1:
+      page_196(player);
+      break; // Exit the loop and function after making a choice
+    case 2:
+      page_25(player);
+      break; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
+void page_268(Player &player) {
+  std::cout
+      << "\n\nYou reach quickly into your backpack and pull out the Garlic "
+         "Buds. The Vampire BAts close in on you but veer away at the last "
+         "second, screeching loudly. They hover above you, eager to drink your "
+         "blood, but the garlic keeps them at bay. Eventyally they fly off in "
+         "search of some other prey. Leaving the garlic by your side, you "
+         "settle down to sleep again. In the morning you collect your "
+         "belonging and head north along the path.\n";
+  // Adds temporary dice addition for 2 battle turns
+  next();
+  page_119(player);
+}
+void page_269(Player &player) {
+  std::cout
+      << "\n\nYou shout at two humanoids who are tending a patch of "
+         "green-topped fungi. They ignore you, continuing with their work. You "
+         "grab hold of a fungus top, breaking a piece off, and start to eat. "
+         "It tates good and adds strength to your  body.\n\nYou gain 4 STAMINA "
+         "oints.\nThere does not seem much sense in staying here any longer "
+         "and "
+         "you walk over to the steps on the far wall.\n";
+  // Adds temporary dice addition for 2 battle turns
+  next();
+  page_293(player);
+}
+void page_270(Player &player) {
+  int pick = 0; // Declare pick outside the loop to persist between iterations
+  do {
+    std::cout
+        << "\n\nThe tunnel ends at a cave entrance. On entering the cave you "
+           "see that the roof is no higher than the tunnel and you are unable "
+           "to stand up. The cave is the lair of an intelligent creature, for "
+           "it contains small pieces of furniture. There is a wooden box just "
+           "over a metre in length at the back of the cave.\n1. If you wish to "
+           "lift the lid of the box.\n2. If you wish to turn round and return "
+           "to the junction in the tunnel.\n3. View INVENTORY\n";
+
+    pick = choice();
+
+    switch (pick) {
+    case 1:
+      page_229(player);
+      break; // Exit the loop and function after making a choice
+    case 2:
+      page_121(player);
+      break; // Exit the loop and function after making a choice
+    case 3:
+      viewInventory(player);
+      break; // Go back to the loop to allow for another choice
+
+    default:
+      std::cout << "\nInvalid choice. Please try again.\n";
+      break;
+    }
+  } while (pick != 1 && pick != 2); // Loop until player picks WEST or EAST
+}
 void page_271(Player &player) {
   int pick = 0; // Declare pick outside the loop to persist between iterations
   do {
