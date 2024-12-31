@@ -1,136 +1,6 @@
-use rand::Rng;
-use serde::{Deserialize, Serialize};
-use std::io;
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Pages {
-    pub pages: Vec<Page>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Page {
-    pub number: i64,
-    pagetype: PageType,
-    pub text: String,
-    // pub actions: Actions,
-    pub next: Option<i64>,
-    pub itemchoices: Option<Vec<ItemChoice>>,
-    pub pathchoices: Option<Vec<PathChoice>>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct ItemChoice {
-    pub name: String,
-    pub price: i32,
-    pub details: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct PathChoice {
-    pub name: String,
-    pub nextpage: i32,
-}
-
-#[allow(dead_code)]
-#[derive(Debug)]
-pub struct Items {
-    name: String,
-    price: i32,
-    details: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-enum PageType {
-    Intro,
-    Decision2path,
-    Decision3path,
-    Battle1enemy,
-}
-
-#[derive(Debug)]
-struct PlayerStats {
-    init_skill: u8,
-    init_stamina: u8,
-    init_luck: u8,
-    skill: u8,
-    stamina: u8,
-    luck: u8,
-}
-
-impl PlayerStats {
-    // Function to initialize stats, setting stamina and luck to initial values
-    fn initialize(&mut self) {
-        let mut rng = rand::thread_rng();
-        self.init_stamina = (rng.gen_range(1..=10) % 6 + 1) + 6; // Generate random stamina between 1 and 10
-        self.init_luck = (rng.gen_range(1..=10) % 12 + 1) + 12; // Generate random luck between 1 and 10
-        self.init_skill = (rng.gen_range(1..=10) % 6 + 1) + 6;
-        self.stamina = self.init_stamina;
-        self.luck = self.init_luck;
-        self.skill = self.init_skill;
-    }
-
-    //pub fn print_stats(&self) {
-    //    println!(
-    //        "Skill: {}, Stamina: {}, Luck: {}",
-    //        self.skill, self.stamina, self.luck
-    //    );
-    //}
-}
-
-#[allow(dead_code)]
-#[derive(Debug)]
-struct Player {
-    stats: PlayerStats,
-    items: Vec<Items>,
-    rations: i32,
-    gold: i32,
-}
-
-impl Player {
-    fn new(items: Vec<Items>) -> Self {
-        let mut player_stats = PlayerStats {
-            init_skill: 0,
-            init_stamina: 0,
-            init_luck: 0,
-            skill: 0,
-            stamina: 0,
-            luck: 0,
-        };
-
-        player_stats.initialize(); // Initialize stats with random values
-
-        //player_stats.print_stats();
-        Self {
-            stats: player_stats,
-            items,
-            rations: 10, // Default rations to 10 if not provided
-            gold: 30,
-        }
-    }
-    fn add_item(&mut self, item: Items) {
-        self.items.push(item);
-    }
-
-    fn print_inventory(&self) {
-        println!("---Player Stats---");
-        println!("SKILL: {}", self.stats.skill);
-        println!("STAMINA: {}", self.stats.stamina);
-        println!("LUCK: {}", self.stats.luck);
-        println!("\nRations to restore Stamina: {}", self.rations);
-        println!("Gold: {}", self.gold);
-
-        println!("\n---Inventory---");
-        for item in &self.items {
-            println!("{}", item.name);
-            println!("\tPrice: {} Gold", item.price);
-            println!("\tDetails: {}", item.details);
-        }
-    }
-}
+use std::{io, process::exit};
+mod models;
+use models::*;
 
 //fn load_pages() {
 //    let file_contents =
@@ -170,7 +40,12 @@ fn load_pages() -> Pages {
 }
 
 fn run_page(mut player: Player, pages: &Pages) {
-    let mut current_page: i64 = 0; // Start with page 0
+    let mut current_page: i64 = 4; // Start with page 0
+                                   //player.add_item(Items {
+                                   //    name: "Ring of Light".to_string(),
+                                   //    price: 5,
+                                   //    details: "Text".to_string(),
+                                   //});
     loop {
         // Find the page matching the current_page number
         if let Some(page) = pages.pages.iter().find(|p| p.number == current_page) {
@@ -200,12 +75,67 @@ fn run_page(mut player: Player, pages: &Pages) {
                 }
                 PageType::Decision2path => {
                     println!("{}", page.text);
-                    let next_page = path_choice(page);
-                    current_page = next_page as i64; // Update current_page to selected page
+                    current_page = path_choice(page); // Update current_page to selected page
                 }
                 PageType::Decision3path => {
-                    println!("3 path decision!");
-                    // Implement 3-path decision logic here
+                    println!("{}", page.text);
+                    current_page = path_choice(page); // Update current_page to selected page
+                }
+                PageType::Death => {
+                    println!("{}", page.text);
+                    exit(0);
+                }
+                PageType::UseItem => {
+                    println!("{}", page.text);
+                    let hasitem = player.has_item(page.requireitem.clone());
+                    if hasitem {
+                        current_page = use_item_choice(page);
+                    } else {
+                        if let Some(noitem) = &page.noitemchoice {
+                            println!("{}", noitem.name)
+                        } else {
+                            println!("No valid noitemchoice provided.");
+                        }
+
+                        let mut input = String::new();
+                        io::stdin()
+                            .read_line(&mut input)
+                            .expect("Failed to read input");
+
+                        if let Some(next_page) = &page.noitemchoice {
+                            current_page = next_page.nextpage;
+                        }
+                    }
+
+                    //for inventory in &player.items {
+                    //    if Some(&inventory.name) == page.requireitem.as_ref() {
+                    //        let next_page = path_choice(page);
+                    //        current_page = next_page as i64;
+                    //    } else {
+                    //        //TODO: handle checking if player has an item for specific pages most
+                    //        //likely need to add a new function that is just like path choices or
+                    //        //abstract the path choices function to just do input and then loop the
+                    //        //input im not sure
+                    //        //let next_page = &page.noitemchoices.iter().enumerate();
+                    //        //current_page = next_page as i64;
+                    //    }
+                    //}
+                }
+                PageType::StatModify => {
+                    if let Some(statmod) = &page.statchange {
+                        println!("Number of stat changes: {}", statmod.len());
+                        for changestat in statmod {
+                            player.stat_change(changestat);
+                            if player.stats.stamina <= 0 {
+                                println!("You have perished in combat. Your adventure ends here.");
+                                std::process::exit(0);
+                            } else if let Some(resultalive) = &page.resultalivetext {
+                                println!("{}", resultalive);
+                                //player.stats.print_stats();
+                                current_page = path_choice(page);
+                            }
+                        }
+                    }
                 }
             }
         } else {
@@ -215,7 +145,41 @@ fn run_page(mut player: Player, pages: &Pages) {
     }
 }
 
-fn path_choice(page: &Page) -> i32 {
+fn use_item_choice(page: &Page) -> i64 {
+    if let Some(hasitemchoices) = &page.hasitemchoices {
+        loop {
+            //println!("Choose an option:");
+            //for item in player_item.items.iter().enumerate() {
+            //    if Some(item) == &page.requireitem {}
+            //}
+            //if let Some(player.has_item(page.requireitem)) {
+            for (index, hasitemchoices) in hasitemchoices.iter().enumerate() {
+                println!("{}. {}", index + 1, hasitemchoices.name);
+            }
+            //}
+
+            let mut input = String::new();
+            io::stdin()
+                .read_line(&mut input)
+                .expect("Failed to read input");
+
+            if let Ok(choice_index) = input.trim().parse::<usize>() {
+                if choice_index >= 1 && choice_index <= hasitemchoices.len() {
+                    let selected_item = &hasitemchoices[choice_index - 1];
+                    return selected_item.nextpage;
+                //println!("You chose: {}", selected_item.name);
+                } else {
+                    println!("Invalid choice. Please select a valid option.");
+                }
+            } else {
+                println!("Invalid input. Please enter a number.");
+            }
+        }
+    } else {
+        panic!("No choices available in the page.");
+    }
+}
+fn path_choice(page: &Page) -> i64 {
     if let Some(pathchoices) = &page.pathchoices {
         loop {
             //println!("Choose an option:");

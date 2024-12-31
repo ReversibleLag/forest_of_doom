@@ -22,6 +22,46 @@
       
     },
     {
+            "number": 2,
+			"pagetype": "Death",
+            "text": "\n\nYour adventure ends here as your tasty fresh flesh is about to become a savoury feast for the victorious Ghoul."
+        },
+        {
+            "number": 3,
+			"pagetype": "UseItem",
+            "text": "\n\nYou follow five more arrows to the trunk of an old dead tree still rooted in the ground. You see that the trunk is hollow and that the hole continues through the trunk into the ground to make a tunnel. It is dark down the hole and you cannot see how far it is to the bottom.",
+      "requireitem": "Ring of Light",
+			"hasitemchoices": [
+                {
+					          "name": "Use Ring of Light?",
+                    "nextpage": 322
+                },
+                {
+                    "name": "Choose not to use Ring of Light",
+                    "nextpage": 120
+                }
+            ],
+      "noitemchoice": {"name": "You do not posess the Ring of Light. Continue", "nextpage": 120}
+		},
+    {
+      "number": 4,
+			"pagetype": "StatModify",
+      "statchange": [{"stat": "Stamina", "value": -4}],
+      "text": "\n\nLose 4 STAMINA points.",
+			"resultdeadtext": "\n\nYou have died from blood loss, and your adventure ends here.",
+			"resultalivetext": "You manage to pull the arrow from your shoulder although the pain is agonizing.",
+			"pathchoices":[
+				        {
+                    "name": "If you still wish to enter the cave.",
+                    "nextpage": 49
+                },
+                {
+                    "name": "If you wish you crawl back to the junction.",
+                    "nextpage": 93
+                }
+			]
+        },
+    {
       "number": 261,
       "pagetype": "Decision2path",
       "text": "PAGE IS WORKING!!!!",
