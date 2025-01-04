@@ -13,6 +13,7 @@ pub struct Page {
     pub number: i64,
     pub pagetype: PageType,
     pub text: String,
+    pub text2: Option<String>,
     // pub actions: Actions,
     pub next: Option<i64>,
     pub restoptional: bool,
@@ -175,10 +176,16 @@ impl Player {
                 println!("\nStamina restored to {}", self.stats.init_stamina);
             }
             "Potion of LUCK" => {
-                self.stats.skill = self.stats.init_luck;
-                println!("\nSkill restored to {}", self.stats.init_luck);
+                self.stats.luck = self.stats.init_luck;
+                println!("\nLuck restored to {}", self.stats.init_luck);
             }
-            _ => {}
+            "Potion of Healing" => {
+                self.stats.stamina += 10;
+                println!("\nStamina restored by 10");
+            }
+            _ => {
+                println!("\nCan't use that potion.")
+            }
         }
     }
 
