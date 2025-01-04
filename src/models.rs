@@ -15,7 +15,9 @@ pub struct Page {
     pub text: String,
     // pub actions: Actions,
     pub next: Option<i64>,
+    pub restoptional: bool,
     pub itemchoices: Option<Vec<ItemChoice>>,
+    pub potionchoices: Option<Vec<ItemChoice>>,
     pub pathchoices: Option<Vec<PathChoice>>,
     pub hasitemchoices: Option<Vec<PathChoice>>,
     pub noitemchoice: Option<PathChoice>,
@@ -23,6 +25,7 @@ pub struct Page {
     pub resultdeadtext: Option<String>,
     pub resultalivetext: Option<String>,
     pub statchange: Option<Vec<StatChange>>,
+    pub enemies: Option<Vec<Enemy>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -33,13 +36,21 @@ pub struct StatChange {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Enemy {
+    pub enemyname: String,
+    pub enemyskill: i64,
+    pub enemystamina: i64,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub enum StatType {
     Skill,
     Stamina,
     Luck,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ItemChoice {
     pub name: String,
@@ -65,12 +76,15 @@ pub struct Items {
 #[derive(Debug, Serialize, Deserialize)]
 pub enum PageType {
     Intro,
+    ContinuePath,
     Decision2path,
     Decision3path,
     Battle1enemy,
     Death,
     UseItem,
     StatModify,
+    BattleMutliSeparate,
+    YaztromoShop,
 }
 
 #[derive(Debug)]
@@ -108,7 +122,8 @@ impl PlayerStats {
 pub struct Player {
     pub stats: PlayerStats,
     pub items: Vec<Items>,
-    pub rations: i64,
+    pub potions: Vec<Items>,
+    pub provisions: i64,
     pub gold: i64,
 }
 
@@ -125,16 +140,46 @@ impl Player {
 
         player_stats.initialize(); // Initialize stats with random values
 
-        player_stats.print_stats();
+        //player_stats.print_stats();
         Self {
             stats: player_stats,
             items,
-            rations: 10, // Default rations to 10 if not provided
+            potions: Vec::new(),
+            provisions: 10, // Default provisions to 10 if not provided
             gold: 30,
         }
     }
     pub fn add_item(&mut self, item: Items) {
         self.items.push(item);
+    }
+    pub fn add_potion(&mut self, potion: Items) {
+        self.potions.push(potion);
+    }
+
+    pub fn rest(&mut self) {
+        if self.provisions >= 1 {
+            self.provisions -= 1;
+            self.stats.stamina += 4;
+        }
+        println!("\nRestored 4 Stamina points. Removed 1 Provision.");
+    }
+
+    pub fn use_potion(&mut self, potion: String) {
+        match potion.as_str() {
+            "Potion of SKILL" => {
+                self.stats.skill = self.stats.init_skill;
+                println!("\nSkill restored to {}", self.stats.init_skill);
+            }
+            "Potion of STAMINA" => {
+                self.stats.stamina = self.stats.init_stamina;
+                println!("\nStamina restored to {}", self.stats.init_stamina);
+            }
+            "Potion of LUCK" => {
+                self.stats.skill = self.stats.init_luck;
+                println!("\nSkill restored to {}", self.stats.init_luck);
+            }
+            _ => {}
+        }
     }
 
     pub fn print_inventory(&self) {
@@ -142,7 +187,7 @@ impl Player {
         println!("SKILL: {}", self.stats.skill);
         println!("STAMINA: {}", self.stats.stamina);
         println!("LUCK: {}", self.stats.luck);
-        println!("\nRations to restore Stamina: {}", self.rations);
+        println!("\nProvisions to restore Stamina: {}", self.provisions);
         println!("Gold: {}", self.gold);
 
         println!("\n---Inventory---");
@@ -150,6 +195,13 @@ impl Player {
             println!("{}", item.name);
             println!("\tPrice: {} Gold", item.price);
             println!("\tDetails: {}", item.details);
+        }
+
+        println!("\n---Potions---");
+        for potion in &self.potions {
+            println!("{}", potion.name);
+            println!("\tPrice: {} Gold", potion.price);
+            println!("\tDetails: {}", potion.details);
         }
     }
 
@@ -167,11 +219,11 @@ impl Player {
             StatType::Skill => self.stats.skill += stat.value,
             StatType::Stamina => {
                 self.stats.stamina += stat.value;
-                if self.stats.stamina <= 0 {
-                    println!("You have perished in combat. Your adventure ends here.");
-                    self.stats.print_stats();
-                    std::process::exit(0);
-                }
+                //if self.stats.stamina <= 0 {
+                //    println!("You have perished in combat. Your adventure ends here.");
+                //    self.stats.print_stats();
+                //    std::process::exit(0);
+                //}
             }
             StatType::Luck => self.stats.luck += stat.value,
         }
