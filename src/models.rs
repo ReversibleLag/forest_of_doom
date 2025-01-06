@@ -59,7 +59,7 @@ pub struct ItemChoice {
     pub details: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PathChoice {
     pub name: String,

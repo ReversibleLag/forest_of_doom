@@ -1,6 +1,49 @@
 use std::{io, process::exit};
 mod models;
 use models::*;
+use std::fmt::Display;
+
+// Define a trait for common choice behavior
+trait Choice: Display + Clone {
+    fn get_next_page(&self) -> Option<i64>;
+    fn get_name(&self) -> &str;
+}
+
+// Implement the trait for ItemChoice
+impl Choice for ItemChoice {
+    fn get_next_page(&self) -> Option<i64> {
+        None // ItemChoice does not lead to another page
+    }
+
+    fn get_name(&self) -> &str {
+        &self.name
+    }
+}
+
+// Implement the trait for PathChoice
+impl Choice for PathChoice {
+    fn get_next_page(&self) -> Option<i64> {
+        Some(self.nextpage) // PathChoice leads to another page
+    }
+
+    fn get_name(&self) -> &str {
+        &self.name
+    }
+}
+
+// Implement Display for ItemChoice
+impl Display for ItemChoice {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.name)
+    }
+}
+
+// Implement Display for PathChoice
+impl Display for PathChoice {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.name)
+    }
+}
 
 //fn load_pages() {
 //    let file_contents =
@@ -33,7 +76,8 @@ use models::*;
 //}
 fn load_pages() -> Pages {
     let file_contents =
-        std::fs::read_to_string("src/pages.json").expect("Failed to read JSON file!!");
+        std::fs::read_to_string("/home/kai/ruststuff/forest-of-doom/src/pages.json")
+            .expect("Failed to read JSON file!!");
     let pages: Pages = serde_json::from_str(&file_contents).expect("Failed to deserialize");
 
     pages
@@ -274,149 +318,71 @@ fn get_input() -> String {
 //   for potion in player.has_item(item)
 //}
 
-fn use_item_choice(player: &mut Player, page: &Page) -> i64 {
-    if let Some(hasitemchoices) = &page.hasitemchoices {
-        loop {
-            //println!("Choose an option:");
-            //for item in player_item.items.iter().enumerate() {
-            //    if Some(item) == &page.requireitem {}
-            //}
-            //if let Some(player.has_item(page.requireitem)) {
-            //show_options(player, page);
-
-            println!("0. Show additional Options.");
-            for (index, hasitemchoices) in hasitemchoices.iter().enumerate() {
-                println!("{}. {}", index + 1, hasitemchoices.name);
-            }
-            //if page.restoptional {
-            //    println!("0. Would you like to rest and use 1 Ration?");
-            //}
-            //}
-
-            let input = get_input();
-            if let Ok(choice_index) = input.trim().parse::<usize>() {
-                if choice_index == 0 {
-                    show_options(player, page);
-                    continue;
-                } else if choice_index >= 1 && choice_index <= hasitemchoices.len() {
-                    let selected_item = &hasitemchoices[choice_index - 1];
-                    return selected_item.nextpage;
-                //println!("You chose: {}", selected_item.name);
-                //} else if page.restoptional && choice_index == 0 {
-                //    ration_rest();
-                } else {
-                    println!("Invalid choice. Please select a valid option.");
-                }
-            } else {
-                println!("Invalid input. Please enter a number.");
-            }
+fn generic_choice<T: Choice>(player: &mut Player, page: &Page, choices: &[T]) -> Option<T> {
+    loop {
+        println!("0. Show additional Options.");
+        for (index, choice) in choices.iter().enumerate() {
+            println!("{}. {}", index + 1, choice);
         }
-    } else {
-        panic!("No choices available in the page.");
+
+        let input = get_input();
+        if let Ok(choice_index) = input.trim().parse::<usize>() {
+            if choice_index == 0 {
+                show_options(player, page);
+                continue;
+            } else if choice_index >= 1 && choice_index <= choices.len() {
+                return Some(choices[choice_index - 1].clone());
+            } else {
+                println!("Invalid choice. Please select a valid option.");
+            }
+        } else {
+            println!("Invalid input. Please enter a number.");
+        }
     }
 }
+
 fn path_choice(player: &mut Player, page: &Page) -> i64 {
     if let Some(pathchoices) = &page.pathchoices {
-        loop {
-            match page.pagetype {
-                PageType::StatModify => {}
-                _ => {
-                    println!("{}", page.text);
-                }
-            }
-
-            //println!("Choose an option:");
-            println!("0. Show additional Options.");
-            for (index, pathchoices) in pathchoices.iter().enumerate() {
-                println!("{}. {}", index + 1, pathchoices.name);
-            }
-
-            let input = get_input();
-            if let Ok(choice_index) = input.trim().parse::<usize>() {
-                if choice_index == 0 {
-                    show_options(player, page);
-                    continue;
-                } else if choice_index >= 1 && choice_index <= pathchoices.len() {
-                    let selected_item = &pathchoices[choice_index - 1];
-                    return selected_item.nextpage;
-                //println!("You chose: {}", selected_item.name);
-                } else {
-                    println!("Invalid choice. Please select a valid option.");
-                }
-            } else {
-                println!("Invalid input. Please enter a number.");
-            }
+        if let Some(choice) = generic_choice(player, page, pathchoices) {
+            return choice.get_next_page().unwrap();
         }
-    } else {
-        panic!("No choices available in the page.");
     }
+    panic!("No choices available in the page.");
+}
+
+fn use_item_choice(player: &mut Player, page: &Page) -> i64 {
+    if let Some(hasitemchoices) = &page.hasitemchoices {
+        if let Some(choice) = generic_choice(player, page, hasitemchoices) {
+            return choice.get_next_page().unwrap();
+        }
+    }
+    panic!("No choices available in the page.");
 }
 
 fn item_choice(player: &mut Player, page: &Page) -> Items {
     if let Some(itemchoices) = &page.itemchoices {
-        loop {
-            println!("Choose an option:");
-            println!("0. Show additional Options.");
-            for (index, itemchoice) in itemchoices.iter().enumerate() {
-                println!("{}. {}", index + 1, itemchoice.name);
-            }
-
-            let input = get_input();
-            if let Ok(choice_index) = input.trim().parse::<usize>() {
-                if choice_index == 0 {
-                    show_options(player, page);
-                    continue;
-                } else if choice_index >= 1 && choice_index <= itemchoices.len() {
-                    let selected_item = &itemchoices[choice_index - 1];
-                    println!("You chose: {}", selected_item.name);
-                    return Items {
-                        name: selected_item.name.clone(),
-                        price: selected_item.price,
-                        details: selected_item.details.clone(),
-                    };
-                } else {
-                    println!("Invalid choice. Please select a valid option.");
-                }
-            } else {
-                println!("Invalid input. Please enter a number.");
-            }
+        if let Some(choice) = generic_choice(player, page, itemchoices) {
+            return Items {
+                name: choice.name.clone(),
+                price: choice.price,
+                details: choice.details.clone(),
+            };
         }
-    } else {
-        panic!("No choices available in the page.");
     }
+    panic!("No choices available in the page.");
 }
 
 fn potion_choice(player: &mut Player, page: &Page) -> Items {
     if let Some(potionchoices) = &page.potionchoices {
-        loop {
-            println!("Choose an option:");
-            //println!("0. Show additional Options.");
-            for (index, potionchoice) in potionchoices.iter().enumerate() {
-                println!("{}. {}", index + 1, potionchoice.name);
-            }
-
-            let input = get_input();
-            if let Ok(choice_index) = input.trim().parse::<usize>() {
-                if choice_index >= 1 && choice_index <= potionchoices.len() {
-                    let selected_potion = &potionchoices[choice_index - 1];
-
-                    println!("Added {}", selected_potion.name);
-
-                    return Items {
-                        name: selected_potion.name.clone(),
-                        price: selected_potion.price,
-                        details: selected_potion.details.clone(),
-                    };
-                } else {
-                    println!("Invalid choice. Please select a valid option.");
-                }
-            } else {
-                println!("Invalid input. Please enter a number.");
-            }
+        if let Some(choice) = generic_choice(player, page, potionchoices) {
+            return Items {
+                name: choice.name.clone(),
+                price: choice.price,
+                details: choice.details.clone(),
+            };
         }
-    } else {
-        panic!("No choices available in the page.");
     }
+    panic!("No choices available in the page.");
 }
 
 fn show_options(player: &mut Player, page: &Page) {
