@@ -1,4 +1,4 @@
-use std::{clone, io, process::exit};
+use std::{io, process::exit};
 mod models;
 use models::*;
 
@@ -60,7 +60,7 @@ fn run_page(mut player: Player, pages: &Pages) {
                     }
                     println!("\nChoose your starting potion.");
                     let starting_potion: Items = potion_choice(&mut player, page);
-                    println!("{:?}", starting_potion);
+                    //println!("{:?}", starting_potion);
                     player.add_potion(starting_potion);
                     println!(
                         "Creating your Character: Rolling 2 dice to determine skills.\n\nRolling for initial SKILL: {}\nRolling for initial STAMINA: {}\nRolling for initial LUCK: {}. \n\n",
@@ -174,9 +174,11 @@ fn run_page(mut player: Player, pages: &Pages) {
                         let mut itemchoices = itemchoices.clone();
                         loop {
                             let mut final_index: usize = 0;
+                            println!("\nAmount of Gold: {}", player.gold);
+                            println!("Item ------------------------ Price ");
                             for (index, itemchoice) in itemchoices.iter().enumerate() {
                                 println!(
-                                    "{}. {} - {}",
+                                    "{}. {} -------- {}",
                                     index + 1,
                                     itemchoice.name,
                                     itemchoice.price
@@ -316,7 +318,13 @@ fn use_item_choice(player: &mut Player, page: &Page) -> i64 {
 fn path_choice(player: &mut Player, page: &Page) -> i64 {
     if let Some(pathchoices) = &page.pathchoices {
         loop {
-            println!("{}", page.text);
+            match page.pagetype {
+                PageType::StatModify => {}
+                _ => {
+                    println!("{}", page.text);
+                }
+            }
+
             //println!("Choose an option:");
             println!("0. Show additional Options.");
             for (index, pathchoices) in pathchoices.iter().enumerate() {
@@ -438,6 +446,7 @@ fn show_options(player: &mut Player, page: &Page) {
                                 let selected_potion = &player.potions[choice_index - 1];
                                 println!("You chose: {}", selected_potion.name);
                                 player.use_potion(selected_potion.name.to_string());
+                                player.potions.remove(choice_index - 1);
                             } else {
                                 println!("Invalid choice. Please select a valid option.");
                             }

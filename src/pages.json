@@ -46,7 +46,7 @@
                     "nextpage": 120
                 }
             ],
-      "noitemchoice": {"name": "You do not posess the Ring of Light. Continue", "nextpage": 120}
+      "noitemchoice": {"name": "You do not posess the Ring of Light.\n\nContinue.", "nextpage": 120}
 		},
     {
       "number": 4,
