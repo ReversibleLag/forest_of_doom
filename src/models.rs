@@ -84,7 +84,7 @@ pub enum PageType {
     Death,
     UseItem,
     StatModify,
-    BattleMutliSeparate,
+    Battle,
     YaztromoShop,
 }
 

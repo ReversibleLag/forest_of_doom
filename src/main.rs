@@ -84,12 +84,12 @@ fn load_pages() -> Pages {
 }
 
 fn run_page(mut player: Player, pages: &Pages) {
-    let mut current_page: i64 = 7; // Start with page 0
-                                   //player.add_item(Items {
-                                   //    name: "Ring of Light".to_string(),
-                                   //    price: 5,
-                                   //    details: "Text".to_string(),
-                                   //});
+    let mut current_page: i64 = 10; // Start with page 0
+                                    //player.add_item(Items {
+                                    //    name: "Ring of Light".to_string(),
+                                    //    price: 5,
+                                    //    details: "Text".to_string(),
+                                    //});
     loop {
         // Find the page matching the current_page number
         if let Some(page) = pages.pages.iter().find(|p| p.number == current_page) {
@@ -197,11 +197,19 @@ fn run_page(mut player: Player, pages: &Pages) {
                         current_page = *next;
                     }
                 }
-                PageType::BattleMutliSeparate => {
+                PageType::Battle => {
                     //player.print_inventory();
                     //println!("{}", &page.text);
                     //current_page =
-                    multi_battle(&mut player, page);
+
+                    battle(&mut player, page);
+                    println!("You have won the battle!");
+                    println!("\nPress enter to Continue.");
+
+                    get_input();
+                    if let Some(next) = &page.next {
+                        current_page = *next;
+                    }
                 }
                 PageType::YaztromoShop => {
                     println!("{}", page.text);
@@ -301,7 +309,7 @@ fn get_input() -> String {
     input
 }
 
-fn multi_battle(player: &mut Player, page: &Page) {
+fn battle(player: &mut Player, page: &Page) {
     println!("{}", page.text);
     if let Some(enemies) = &page.enemies {
         println!("Enemies!");
@@ -322,12 +330,9 @@ fn multi_battle(player: &mut Player, page: &Page) {
             }
             enemy_vec.retain(|enemy| enemy.enemystamina > 0);
         }
+        //println!("gas");
     }
 }
-
-//fn battle(player: &mut Player, page: &Page) {
-//    //give the player options
-//}
 
 fn roll_dice() -> i64 {
     let mut rng = rand::thread_rng();
@@ -335,49 +340,141 @@ fn roll_dice() -> i64 {
 }
 
 fn combat_round(player: &mut Player, enemy: &mut Enemy) {
-    println!("Attack Started! Press to continue...");
+    println!("\nAttack Started! Press to continue...");
 
     //TODO: Allow the player to use luck to reduce the amount of damage taken.
     get_input();
     let player_attack = roll_dice() + player.stats.skill;
     let enemy_attack = roll_dice() + enemy.enemyskill;
-
-    println!(
-        "You rolled: {} | {} rolled: {}",
-        player_attack, enemy.enemyname, enemy_attack
-    );
-
-    if player_attack > enemy_attack {
-        enemy.enemystamina -= 2;
-        if enemy.enemystamina > 0 {
-            println!("You wounded {}", enemy.enemyname);
-        }
-        //TODO: Handle enemy taking damage and then if the enemy is killed then remove that enemy
-        //from the list and continue battle
-    } else if enemy_attack > player_attack {
-        println!("{} wounded you", enemy.enemyname);
-        if player.stats.stamina >= 2 {
-            //TODO: Handle player stamina removal and if the player dies
-            player.stats.stamina -= 2;
-        } else {
-            println!("You have perished to {}", enemy.enemyname);
-            exit(0);
-        }
-    } else {
-        println!("Both attacks miss!");
-    }
     if enemy.enemystamina > 0 {
         println!(
             "{}\n\tSkill: {}\n\tStamina: {}",
             enemy.enemyname, enemy.enemyskill, enemy.enemystamina
         );
     } else {
-        println!("You killed the {}", enemy.enemyname);
+        println!("\nYou killed the {}", enemy.enemyname);
     }
     println!(
         "Player\n\tSkill: {}\n\tStamina: {}",
         player.stats.skill, player.stats.stamina
     );
+
+    println!(
+        "You rolled: {} | {} rolled: {}",
+        player_attack, enemy.enemyname, enemy_attack
+    );
+
+    match player_attack.cmp(&enemy_attack) {
+        std::cmp::Ordering::Greater => {
+            println!(
+                "\nYou are able to hit the {} for 2 stamina points.",
+                enemy.enemyname
+            );
+            loop {
+                println!("\n0. Continue with attack. \n1. Would you like to test your luck, and attempt to do 4 damage? Current Luck: {}", player.stats.luck);
+                let input = get_input();
+                if let Ok(choice_index) = input.trim().parse::<usize>() {
+                    if choice_index == 0 {
+                        enemy.enemystamina -= 2;
+                        if enemy.enemystamina > 0 {
+                            println!("You hit {} for 2 damage.", enemy.enemyname);
+                        }
+                        break;
+                    } else if choice_index == 1 {
+                        let roll = roll_dice() + roll_dice();
+                        if roll <= player.stats.luck {
+                            println!("\nRolling for Luck!\n\nYou rolled a {} which is lower than your Luck Score!\n\nYou were lucky!\nReducing Luck Score by 1.", roll);
+                            enemy.enemystamina -= 4;
+                            player.stats.luck -= 1;
+                            if enemy.enemystamina > 0 {
+                                println!("You hit {} for 4 damage.", enemy.enemyname);
+                            } else {
+                                println!("You killed the {}", enemy.enemyname);
+                            }
+                            break;
+                        } else {
+                            println!("\nRolling for Luck!\n\nYou rolled a {} which is higher than your Luck Score!\n\nYou were unlucky!\nReducing Luck Score by 1.", roll);
+                            enemy.enemystamina -= 2;
+                            player.stats.luck -= 1;
+                            if enemy.enemystamina > 0 {
+                                println!("You hit {} for 1 damage.", enemy.enemyname);
+                            } else {
+                                println!("You killed the {}", enemy.enemyname);
+                            }
+                            break;
+                        }
+                    } else {
+                        println!("Invalid choice. Please select a valid option.");
+                    }
+                } else {
+                    println!("Invalid input. Please enter a number.");
+                }
+            }
+        }
+        std::cmp::Ordering::Less => {
+            //println!("{} wounded you", enemy.enemyname);
+            //if player.stats.stamina >= 2 {
+            //    //TODO: Handle player stamina removal and if the player dies
+            //    player.stats.stamina -= 2;
+            //} else {
+            //    println!("You have perished to {}", enemy.enemyname);
+            //    exit(0);
+
+            //}
+            println!(
+                "\nYou are about to be hit for 2 stamina points by {}",
+                enemy.enemyname
+            );
+            loop {
+                println!("\n0. Continue. \n1. Would you like to test your luck, and attempt to avoid some of the damage? Current Luck: {}", player.stats.luck);
+                let input = get_input();
+                if let Ok(choice_index) = input.trim().parse::<usize>() {
+                    if choice_index == 0 && player.stats.stamina >= 2 {
+                        player.stats.stamina -= 2;
+                        if player.stats.stamina > 0 {
+                            println!("You took 2 damage from {}", enemy.enemyname);
+                        } else {
+                            println!("You have perished to {}", enemy.enemyname);
+                            exit(0);
+                        }
+                        break;
+                    } else if choice_index == 1 {
+                        let roll = roll_dice() + roll_dice();
+                        if roll <= player.stats.luck {
+                            println!("\nRolling for Luck!\n\nYou rolled a {} which is lower than your Luck Score!\n\nYou were lucky!\nReducing Luck Score by 1.", roll);
+                            player.stats.luck -= 1;
+                            player.stats.stamina -= 1;
+                            if player.stats.stamina > 0 {
+                                println!("You took 1 damage from {}", enemy.enemyname);
+                                break;
+                            } else {
+                                println!("You have perished to {}", enemy.enemyname);
+                                exit(0);
+                            }
+                        } else {
+                            println!("\nRolling for Luck!\n\nYou rolled a {} which is higher than your Luck Score!\n\nYou were unlucky!\nReducing Luck Score by 1.", roll);
+                            player.stats.luck -= 1;
+                            player.stats.stamina -= 3;
+                            if player.stats.stamina > 0 {
+                                println!("You took 3 damage from {}", enemy.enemyname);
+                                break;
+                            } else {
+                                println!("You have perished to {}", enemy.enemyname);
+                                exit(0);
+                            }
+                        }
+                    } else {
+                        println!("Invalid choice. Please select a valid option.");
+                    }
+                } else {
+                    println!("Invalid input. Please enter a number.");
+                }
+            }
+        }
+        std::cmp::Ordering::Equal => {
+            println!("Both attacks miss!");
+        }
+    }
 }
 
 //fn mutti_battle(player: &Player, page: &Page) {

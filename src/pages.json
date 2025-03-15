@@ -92,7 +92,7 @@
        },
        {
        "number": 7,
-       "pagetype": "BattleMutliSeparate",
+       "pagetype": "Battle",
        "restoptional": false,
        "text": "\nYou draw your sword and prepare to meet the yellow and black-striped attackers. They are KILLER BEES and will attack in separate droves, each drove counting as a single creature.",
        "next": 23,
@@ -118,6 +118,28 @@
                 }
             ]
        },
+	   {
+       "number": 9,
+       "pagetype": "Battle",
+       "restoptional": false,
+       "text": "\n\nYou unlock the door and step back, drawing your sword in case the Golbin tries to attack you. He picks up a wooden stool and, waving it in the air, kicks the door open and charges at you screaming.\nYou must fight.\n",
+       "next": 176,
+	   "enemies":[{"enemyname": "GOBLIN", "enemyskill": 5, "enemystamina": 4}]
+       },
+	   {
+		"number": 10,
+		"pagetype": "ContinuePath",
+		"restoptional": true,
+		"text": "\n\nYou pick up a good-sized rock off the floor and take aim. You throw the rock with all your might at the Ogre but are dismayed to see it fly past his head and crash against the far wall of the cave. You curse, but decide nevertheless to rush into the cave to attack the Ogre.\n",
+		"next": 290
+	   },
+	   {
+		"number": 11,
+		"pagetype": "ContinuePath",
+		"restoptional": true,
+		"text": "\n\nYou start to lose your balance as the illusion distorts your mind. You close your eyes and hold your head in your hands but it makes no difference. You reel around the room and then fall to the floor unconscious.\n",
+		"next": 353
+	   },
     {
       "number": 261,
       "pagetype": "YaztromoShop",
