@@ -51,9 +51,9 @@
     {
       "number": 4,
 			"pagetype": "StatModify",
-      "restoptional": true,
-      "statchange": [{"stat": "Stamina", "value": -4}],
-      "text": "\n\nLose 4 STAMINA points.",
+			"restoptional": true,
+			"statchange": [{"stat": "Stamina", "value": -4}],
+			"text": "\n\nLose 4 STAMINA points.",
 			"resultdeadtext": "\nYou have died from blood loss, and your adventure ends here.",
 			"resultalivetext": "You manage to pull the arrow from your shoulder although the pain is agonizing.",
 			"pathchoices":[
@@ -94,13 +94,29 @@
        "number": 7,
        "pagetype": "BattleMutliSeparate",
        "restoptional": false,
-       "text": "\nYou draw your sword and prepare to meet the yellow- and black-striped attackers. They are KILLER BEES and will attack in separate droves, each drove counting as a single creature.",
+       "text": "\nYou draw your sword and prepare to meet the yellow and black-striped attackers. They are KILLER BEES and will attack in separate droves, each drove counting as a single creature.",
        "next": 23,
         "enemies":[
           {"enemyname": "First KILLER BEE", "enemyskill": 7, "enemystamina": 3},
           {"enemyname": "Second KILLER BEE", "enemyskill": 8, "enemystamina": 4},
           {"enemyname": "Third KILLER BEE", "enemyskill": 7, "enemystamina": 4}
         ]
+       },
+	   {
+       "number": 8,
+       "pagetype": "Decision2path",
+       "restoptional": false,
+       "text": "\n\nWalking along the path, you hear footsteps and arguing voices ahead of you.",
+            "pathchoices": [
+                {
+                    "name": "If you wish to meet the owners voices.",
+                    "nextpage": 317
+                },
+                {
+                    "name": "If you would rather hide in the bushes and let them walk by.",
+                    "nextpage": 392
+                }
+            ]
        },
     {
       "number": 261,

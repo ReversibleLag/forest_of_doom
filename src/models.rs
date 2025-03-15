@@ -16,7 +16,7 @@ pub struct Page {
     pub text2: Option<String>,
     // pub actions: Actions,
     pub next: Option<i64>,
-    pub restoptional: bool,
+    pub restoptional: Option<bool>,
     pub itemchoices: Option<Vec<ItemChoice>>,
     pub potionchoices: Option<Vec<ItemChoice>>,
     pub pathchoices: Option<Vec<PathChoice>>,
@@ -127,7 +127,7 @@ pub struct Player {
     pub provisions: i64,
     pub gold: i64,
 }
-
+#[allow(dead_code)]
 impl Player {
     pub fn new(items: Vec<Items>) -> Self {
         let mut player_stats = PlayerStats {
@@ -162,7 +162,10 @@ impl Player {
             self.provisions -= 1;
             self.stats.stamina += 4;
         }
-        println!("\nRestored 4 Stamina points. Removed 1 Provision.");
+        println!(
+            "\nRestored 4 Stamina points. Removed 1 Provision. {} Provisions left.",
+            self.provisions
+        );
     }
 
     pub fn use_potion(&mut self, potion: String) {

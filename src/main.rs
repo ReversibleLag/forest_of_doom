@@ -1,6 +1,7 @@
 use std::{io, process::exit};
 mod models;
 use models::*;
+use rand::Rng;
 use std::fmt::Display;
 
 // Define a trait for common choice behavior
@@ -76,15 +77,14 @@ impl Display for PathChoice {
 //}
 fn load_pages() -> Pages {
     let file_contents =
-        std::fs::read_to_string("/home/kai/ruststuff/forest-of-doom/src/pages.json")
-            .expect("Failed to read JSON file!!");
+        std::fs::read_to_string("src/pages.json").expect("Failed to read JSON file!!");
     let pages: Pages = serde_json::from_str(&file_contents).expect("Failed to deserialize");
 
     pages
 }
 
 fn run_page(mut player: Player, pages: &Pages) {
-    let mut current_page: i64 = 0; // Start with page 0
+    let mut current_page: i64 = 7; // Start with page 0
                                    //player.add_item(Items {
                                    //    name: "Ring of Light".to_string(),
                                    //    price: 5,
@@ -120,12 +120,13 @@ fn run_page(mut player: Player, pages: &Pages) {
                 }
                 PageType::Decision2path => {
                     //player.print_inventory();
+                    //println!("{}", page.text);
 
                     current_page = path_choice(&mut player, page); // Update current_page to selected page
                 }
                 PageType::Decision3path => {
                     //player.print_inventory();
-                    println!("{}", page.text);
+                    //println!("{}", page.text);
                     current_page = path_choice(&mut player, page); // Update current_page to selected page
                 }
                 PageType::Death => {
@@ -152,20 +153,6 @@ fn run_page(mut player: Player, pages: &Pages) {
                             current_page = next_page.nextpage;
                         }
                     }
-
-                    //for inventory in &player.items {
-                    //    if Some(&inventory.name) == page.requireitem.as_ref() {
-                    //        let next_page = path_choice(page);
-                    //        current_page = next_page as i64;
-                    //    } else {
-                    //        //TODO: handle checking if player has an item for specific pages most
-                    //        //likely need to add a new function that is just like path choices or
-                    //        //abstract the path choices function to just do input and then loop the
-                    //        //input im not sure
-                    //        //let next_page = &page.noitemchoices.iter().enumerate();
-                    //        //current_page = next_page as i64;
-                    //    }
-                    //}
                 }
                 PageType::StatModify => {
                     //player.print_inventory();
@@ -174,9 +161,14 @@ fn run_page(mut player: Player, pages: &Pages) {
                         //println!("Number of stat changes: {}", statmod.len());
                         for changestat in statmod {
                             //player.stats.print_stats();
-                            player.stat_change(changestat);
+                            match changestat.stat {
+                                StatType::Stamina => {}
+                                StatType::Skill => {}
+                                StatType::Luck => {}
+                                _ => {}
+                            }
 
-                            player.stats.print_stats();
+                            //player.stats.print_stats();
                             if player.stats.stamina <= 0 {
                                 if let Some(deathtext) = &page.resultdeadtext {
                                     println!("{}", deathtext);
@@ -207,9 +199,9 @@ fn run_page(mut player: Player, pages: &Pages) {
                 }
                 PageType::BattleMutliSeparate => {
                     //player.print_inventory();
-                    println!("{}", &page.text);
-
-                    //mutti_battle(&player, &page);
+                    //println!("{}", &page.text);
+                    //current_page =
+                    multi_battle(&player, page);
                 }
                 PageType::YaztromoShop => {
                     println!("{}", page.text);
@@ -309,6 +301,31 @@ fn get_input() -> String {
     input
 }
 
+fn multi_battle(player: &Player, page: &Page) {
+    println!("{}", page.text);
+    if let Some(enemies) = &page.enemies {
+        for enemy in enemies {
+            println!(
+                "{}\n\tSkill: {}\n\tStamina: {}",
+                enemy.enemyname, enemy.enemyskill, enemy.enemystamina
+            );
+        }
+    }
+}
+
+fn player_battle(player: &Player, page: &Page) {
+    //give the player options
+}
+
+fn roll_dice() -> i64 {
+    let mut rng = rand::thread_rng();
+    rng.gen_range(2..=12)
+}
+
+//fn combat_round(player: &mut Player, enemy: &Enemy) {
+//    let player_attack = roll_dice() + player.
+//}
+
 //fn mutti_battle(player: &Player, page: &Page) {
 //
 //
@@ -320,6 +337,7 @@ fn get_input() -> String {
 
 fn generic_choice<T: Choice>(player: &mut Player, page: &Page, choices: &[T]) -> Option<T> {
     loop {
+        println!("{}", page.text);
         println!("0. Show additional Options.");
         for (index, choice) in choices.iter().enumerate() {
             println!("{}. {}", index + 1, choice);
@@ -390,7 +408,7 @@ fn show_options(player: &mut Player, page: &Page) {
         player.print_inventory();
         println!("0. Use a Potion.");
         println!("1. Continue.");
-        if page.restoptional {
+        if let Some(rest) = page.restoptional {
             println!("2. Rest and use a Provision to heal 4 stamina points.");
         }
         let input = get_input();
@@ -425,17 +443,16 @@ fn show_options(player: &mut Player, page: &Page) {
                     break;
                 }
                 2 => {
-                    if page.restoptional {
-                        println!(
-                            "\nYou have rested for several hours and restored 4 Stamina points."
-                        );
+                    if let Some(rest) = page.restoptional {
                         if player.provisions >= 1 {
                             player.rest();
+                            println!("\nYou have rested for several hours.");
                         } else {
                             println!("You do not have anymore provisions.");
                         }
                     } else {
-                        println!("\nYou may not rest now.");
+                        continue;
+                        //println!("\nYou may not rest now.");
                     }
                 }
                 _ => {
