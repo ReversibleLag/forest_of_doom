@@ -201,7 +201,7 @@ fn run_page(mut player: Player, pages: &Pages) {
                     //player.print_inventory();
                     //println!("{}", &page.text);
                     //current_page =
-                    multi_battle(&player, page);
+                    multi_battle(&mut player, page);
                 }
                 PageType::YaztromoShop => {
                     println!("{}", page.text);
@@ -301,30 +301,84 @@ fn get_input() -> String {
     input
 }
 
-fn multi_battle(player: &Player, page: &Page) {
+fn multi_battle(player: &mut Player, page: &Page) {
     println!("{}", page.text);
     if let Some(enemies) = &page.enemies {
-        for enemy in enemies {
+        println!("Enemies!");
+
+        let mut enemy_vec: Vec<Enemy> = enemies.clone();
+
+        for enemy in &enemy_vec {
+            //create enemy objects
+            //go to each combat round and rotate
             println!(
                 "{}\n\tSkill: {}\n\tStamina: {}",
                 enemy.enemyname, enemy.enemyskill, enemy.enemystamina
             );
         }
+        while !enemy_vec.is_empty() && player.stats.stamina > 0 {
+            for enemy in enemy_vec.iter_mut() {
+                combat_round(player, enemy);
+            }
+            enemy_vec.retain(|enemy| enemy.enemystamina > 0);
+        }
     }
 }
 
-fn player_battle(player: &Player, page: &Page) {
-    //give the player options
-}
+//fn battle(player: &mut Player, page: &Page) {
+//    //give the player options
+//}
 
 fn roll_dice() -> i64 {
     let mut rng = rand::thread_rng();
     rng.gen_range(2..=12)
 }
 
-//fn combat_round(player: &mut Player, enemy: &Enemy) {
-//    let player_attack = roll_dice() + player.
-//}
+fn combat_round(player: &mut Player, enemy: &mut Enemy) {
+    println!("Attack Started! Press to continue...");
+
+    //TODO: Allow the player to use luck to reduce the amount of damage taken.
+    get_input();
+    let player_attack = roll_dice() + player.stats.skill;
+    let enemy_attack = roll_dice() + enemy.enemyskill;
+
+    println!(
+        "You rolled: {} | {} rolled: {}",
+        player_attack, enemy.enemyname, enemy_attack
+    );
+
+    if player_attack > enemy_attack {
+        enemy.enemystamina -= 2;
+        if enemy.enemystamina > 0 {
+            println!("You wounded {}", enemy.enemyname);
+        }
+        //TODO: Handle enemy taking damage and then if the enemy is killed then remove that enemy
+        //from the list and continue battle
+    } else if enemy_attack > player_attack {
+        println!("{} wounded you", enemy.enemyname);
+        if player.stats.stamina >= 2 {
+            //TODO: Handle player stamina removal and if the player dies
+            player.stats.stamina -= 2;
+        } else {
+            println!("You have perished to {}", enemy.enemyname);
+            exit(0);
+        }
+    } else {
+        println!("Both attacks miss!");
+    }
+    if enemy.enemystamina > 0 {
+        println!(
+            "{}\n\tSkill: {}\n\tStamina: {}",
+            enemy.enemyname, enemy.enemyskill, enemy.enemystamina
+        );
+    } else {
+        println!("You killed the {}", enemy.enemyname);
+    }
+    println!(
+        "Player\n\tSkill: {}\n\tStamina: {}",
+        player.stats.skill, player.stats.stamina
+    );
+}
 
 //fn mutti_battle(player: &Player, page: &Page) {
 //

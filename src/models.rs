@@ -36,7 +36,7 @@ pub struct StatChange {
     pub value: i64,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Enemy {
     pub enemyname: String,
