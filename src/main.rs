@@ -84,7 +84,7 @@ fn load_pages() -> Pages {
 }
 
 fn run_page(mut player: Player, pages: &Pages) {
-    let mut current_page: i64 = 10; // Start with page 0
+    let mut current_page: i64 = 11; // Start with page 0
                                     //player.add_item(Items {
                                     //    name: "Ring of Light".to_string(),
                                     //    price: 5,
@@ -134,6 +134,35 @@ fn run_page(mut player: Player, pages: &Pages) {
                     println!("{}", page.text);
                     exit(0);
                 }
+                PageType::GnomeSurrenderItems => {
+                    println!("{}", page.text);
+
+                    if let Some(pay_choice) = &page.pay {
+                        println!("\n\nPay the Gnome:");
+                        let mut i = 1;
+                        for paying in pay_choice {
+                            println!("{}. {} {}", i, paying.value, paying.name);
+                            i += 1;
+                        }
+                    }
+                    let input = get_input();
+                    if let Ok(choice_index) = input.trim().parse::<usize>() {
+                        match choice_index {
+                            1 => {
+                                println!(
+                                    "\n\nYou payed the Gnome {} {}",
+                                    paying.value, paying.name
+                                );
+                            }
+                            2 => {
+                                println!("\n\nChoose what Items from your backpack you will give the Gnome:");
+                            }
+                            _ => {
+                                println!("Invalid input. Please enter a number.");
+                            }
+                        }
+                    }
+                }
                 PageType::UseItem => {
                     //player.print_inventory();
                     println!("{}", page.text);
@@ -162,13 +191,30 @@ fn run_page(mut player: Player, pages: &Pages) {
                         for changestat in statmod {
                             //player.stats.print_stats();
                             match changestat.stat {
-                                StatType::Stamina => {}
-                                StatType::Skill => {}
-                                StatType::Luck => {}
+                                StatType::Stamina => {
+                                    player.stats.stamina += changestat.value;
+                                }
+                                StatType::Skill => {
+                                    player.stats.skill += changestat.value;
+                                }
+                                StatType::Luck => {
+                                    player.stats.luck += changestat.value;
+                                }
+                                StatType::Gold => {
+                                    player.gold += changestat.value;
+                                }
                                 _ => {}
                             }
 
                             //player.stats.print_stats();
+                            if page.pathchoices.is_none() {
+                                println!("\nContinue.");
+
+                                get_input();
+                                if let Some(next) = &page.next {
+                                    current_page = *next;
+                                }
+                            }
                             if player.stats.stamina <= 0 {
                                 if let Some(deathtext) = &page.resultdeadtext {
                                     println!("{}", deathtext);

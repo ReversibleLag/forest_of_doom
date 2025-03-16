@@ -140,6 +140,34 @@
 		"text": "\n\nYou start to lose your balance as the illusion distorts your mind. You close your eyes and hold your head in your hands but it makes no difference. You reel around the room and then fall to the floor unconscious.\n",
 		"next": 353
 	   },
+	   {
+		"number": 12,
+		"pagetype": "GnomeSurrenderItems",
+		"restoptional": false,
+		"pay": [{"name": "Gold", "value": 10},{"name": "Items from your Backpack", "value": 2}]
+		"text": "\n\nYou tell the Gnome that perhaps you had been a little hasty in drawing your sword, but you had to be prepared for anything within the evil boundary of Darkwood Forest. He replies that that is no excuse for drawing your weapon on a defenceless old mane and, if you want your sword back, it will cost you 10 Gold Pieces or two items of treasure from your backpack.",
+		"next": 67,
+		"pathchoices": [
+        {"name": "Continue the conversation with the Gnome?", "nextpage": 271},
+        {"name": "If you have had enough of the Gnome and would rather head west along the path.", "nextpage": 67}
+      ]
+	   },
+	   {
+		   "number": 13,
+			"pagetype": "StatModify",
+			"restoptional": true,
+			"statchange": [{"stat": "Luck", "value": -3}],
+			"text": "\n\nThe vibrations feel like shock waves which seem to hammer your body. Your legs feel like lead and you are unable to move them. Suddenly the hut collapses and crashes to the ground. The sky darkens and a wind starts to howl all about you. The wind blows harder and becomes as strong as gale, its force knocking you to the ground. You cling to the porch and shielf your face from the dirt and debris thrown up by the gale. Above the deafening noise of the wind you hear laughter followed by a deep voice rejoicing, \"I'm free! I'm free!\" You have released an EARTH ELEMENTAL on to the world. \n\nLose 3 LUCK points. \n\nGradually the howling wind dies down and the skies brighten. You pick yourself up from out of the rubble and walk slowly back to the path to head north again.\n",
+			"next": 149
+        },
+		{
+		   "number": 14,
+			"pagetype": "StatModify",
+			"restoptional": true,
+			"statchange": [{"stat": "Gold", "value": -3}],
+			"text": "\n\nThe pit is circular with smooth sides and you are too weak from your fall to climb out. You call for help, but nobody comes to your aid. You sit down and ponder your fate. After about an hour you hear a noise overhead. You look up to see the bearded face of a stocky man wearing a fur hat. He looks annoyed. He is a fur trapper and you have ruined his trap. He shouts down to you that if you expect him to throw a rope down to rescue you, it is going to cost you 3 Gold Pieces. Failing that, he will take any magical item you care to give him from your backpack. After you agree to pay off the angry fur trapper he throws down a rope to you and you climb out of the pit. You hand over the feee, crossing it off your Equipment List, and glare at the unfriendly fur trapper before setting off north again down the gorge.\n\nLose 3 Gold Pieces.\n",
+			"next": 255
+        },
     {
       "number": 261,
       "pagetype": "YaztromoShop",

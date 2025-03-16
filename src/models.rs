@@ -27,6 +27,7 @@ pub struct Page {
     pub resultalivetext: Option<String>,
     pub statchange: Option<Vec<StatChange>>,
     pub enemies: Option<Vec<Enemy>>,
+    pub pay: Option<Vec<Pay>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -44,11 +45,19 @@ pub struct Enemy {
     pub enemystamina: i64,
 }
 
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct Pay {
+    pub name: String,
+    pub value: i64,
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 pub enum StatType {
     Skill,
     Stamina,
     Luck,
+    Gold,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -86,6 +95,7 @@ pub enum PageType {
     StatModify,
     Battle,
     YaztromoShop,
+    GnomeSurrenderItems,
 }
 
 #[derive(Debug)]
@@ -236,6 +246,7 @@ impl Player {
                 //}
             }
             StatType::Luck => self.stats.luck += stat.value,
+            StatType::Gold => self.gold += stat.value,
         }
     }
 }
